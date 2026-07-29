@@ -15,6 +15,8 @@ type JobRow = {
   level: string | null;
   role: string;
   work_mode: string | null;
+  source: string | null;
+  ats_label: string | null;
   updated_at: string | Date;
 };
 
@@ -49,12 +51,13 @@ function toJob(row: JobRow): Job {
     level: row.level ?? "Not specified",
     role: row.role,
     workMode: row.work_mode ?? "Not specified",
+    source: row.source ?? row.ats_label ?? "",
   };
 }
 
 const JOB_COLUMNS = `
   company_name, title, location, canonical_url, posted_at, remote, department,
-  keywords, tech_stack, level, role, work_mode, updated_at
+  keywords, tech_stack, level, role, work_mode, updated_at, source, ats_label
 `;
 
 export async function getJobsSnapshot(): Promise<JobsSnapshot> {

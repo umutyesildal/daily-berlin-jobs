@@ -75,6 +75,12 @@ Supabase's `anon` and `authenticated` API roles. The web application uses only
 its server-side PostgreSQL connection; no database URL or Data API key reaches
 the browser.
 
+Migration `006_enable_row_level_security.sql` also enables RLS on every public
+table. No Data API policies are created because browser clients do not query the
+database directly. This resolves Supabase's `rls_disabled_in_public` advisory
+while preserving owner access for the crawler and the explicitly granted,
+read-only SQL views used by the web application.
+
 Migration `004_enforce_engineering_jobs.sql` removes legacy rows with an empty
 role and adds a database constraint so non-engineering rows cannot enter the
 canonical job table.

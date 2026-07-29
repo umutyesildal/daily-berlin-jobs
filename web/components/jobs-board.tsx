@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { Job, JobsSnapshot } from "@/lib/jobs";
+import { isLinkedInJob, type Job, type JobsSnapshot } from "@/lib/jobs";
 
 const PAGE_SIZE = 40;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -137,7 +137,16 @@ export function JobsBoard({ snapshot }: { snapshot: JobsSnapshot }) {
         {visibleJobs.map((job: Job, index) => (
           <a className="job-row" href={job.link || undefined} target="_blank" rel="noreferrer" key={`${job.link}-${index}`}>
             <div className="role-cell">
-              <strong>{job.title || "Untitled role"}</strong>
+              <div className="job-title-line">
+                <strong>{job.title || "Untitled role"}</strong>
+                {isLinkedInJob(job) && (
+                  <span className="linkedin-source" role="img" aria-label="LinkedIn source" title="Source: LinkedIn">
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path d="M5.2 7.1A2.1 2.1 0 1 0 5.2 3a2.1 2.1 0 0 0 0 4.1ZM3.4 21h3.7V8.7H3.4V21Zm5.9-12.3H13v1.7h.1c.5-1 1.8-2.1 3.7-2.1 4 0 4.7 2.6 4.7 6V21h-3.8v-5.9c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1v6H9.3V8.7Z" />
+                    </svg>
+                  </span>
+                )}
+              </div>
               <div className="job-tags">
                 <span className="role-tag">{job.role}</span>
                 {job.level !== "Not specified" && <span className="meta-tag">{job.level}</span>}

@@ -38,6 +38,10 @@ button { cursor:pointer; }
 .job-row span,.job-row time { color:var(--muted); font-size:13px; }
 .role-cell { min-width:0; display:grid; gap:7px; }
 .role-cell strong { font-size:14px; line-height:1.25; }
+.job-title-line { display:flex; align-items:center; gap:7px; min-width:0; }
+.job-title-line strong { min-width:0; }
+.job-row .linkedin-source { width:17px; height:17px; flex:0 0 17px; display:inline-grid; place-items:center; border-radius:3px; background:#0a66c2; color:#fff; }
+.linkedin-source svg { width:13px; height:13px; fill:currentColor; }
 .job-tags { display:flex; flex-wrap:wrap; gap:5px; }
 .job-tags span { border:0; border-radius:999px; background:#eceeea; padding:3px 7px; color:#5e6763; font-size:9px; font-weight:700; line-height:1.2; }
 .job-tags .role-tag { background:#e8e4d9; color:#5c5542; }

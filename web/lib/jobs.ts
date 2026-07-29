@@ -11,6 +11,7 @@ export type Job = {
   level: string;
   role: string;
   workMode: string;
+  source: string;
 };
 
 export type JobsSnapshot = {
@@ -18,3 +19,14 @@ export type JobsSnapshot = {
   daily: Job[];
   updatedAt: string;
 };
+
+export function isLinkedInJob(job: Pick<Job, "source" | "link">): boolean {
+  if (job.source.trim().toLocaleLowerCase().includes("linkedin")) return true;
+
+  try {
+    const hostname = new URL(job.link).hostname.toLocaleLowerCase();
+    return hostname === "linkedin.com" || hostname.endsWith(".linkedin.com");
+  } catch {
+    return false;
+  }
+}

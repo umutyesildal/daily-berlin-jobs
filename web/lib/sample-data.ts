@@ -20,6 +20,7 @@ const SAMPLE_JOBS: Job[] = [
     level: "Senior",
     role: "Backend",
     workMode: "Hybrid",
+    source: "LinkedIn",
   },
   {
     company: "Community Cloud",
@@ -34,6 +35,7 @@ const SAMPLE_JOBS: Job[] = [
     level: "Staff / Principal",
     role: "Platform / DevOps / SRE",
     workMode: "Remote",
+    source: "Greenhouse",
   },
   {
     company: "Civic Robotics",
@@ -48,6 +50,7 @@ const SAMPLE_JOBS: Job[] = [
     level: "Junior / Entry",
     role: "Embedded / Firmware / Robotics",
     workMode: "On-site",
+    source: "Ashby",
   },
   {
     company: "Responsible AI Berlin",
@@ -62,6 +65,7 @@ const SAMPLE_JOBS: Job[] = [
     level: "Not specified",
     role: "Data / AI / ML",
     workMode: "Hybrid",
+    source: "Lever",
   },
 ];
 
