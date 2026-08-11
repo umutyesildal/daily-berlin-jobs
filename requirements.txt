@@ -1,13 +1,13 @@
 requests>=2.34.2
-pandas>=3.0.3
+pandas>=3.0.5
 python-dotenv>=1.2.2
-psycopg[binary]>=3.2.10
+psycopg[binary]>=3.3.4
 PyYAML>=6.0.3
 beautifulsoup4>=4.15.0
 lxml>=6.1.1
 selenium>=4.46.0
 google-generativeai>=0.8.6
 gspread>=6.2.1
-google-auth>=2.56.0
+google-auth>=2.56.3
 google-auth-oauthlib>=1.4.0
-google-auth-httplib2>=0.4.0
+google-auth-httplib2>=0.4.1
