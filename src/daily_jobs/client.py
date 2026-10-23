@@ -23,6 +23,11 @@ from .scrapers.done.wipro_scraper import WiproScraper
 from .scrapers.done.workable_scraper import WorkableScraper
 from .scrapers.done.workday_scraper import WorkdayScraper
 from .scrapers.done.phenom_scraper import PhenomScraper
+from .scrapers.done.forto_scraper import FortoScraper
+from .scrapers.done.frequenz_scraper import FrequenzScraper
+from .scrapers.done.softgarden_scraper import SoftgardenScraper
+from .scrapers.done.teamtailor_scraper import TeamtailorScraper
+from .scrapers.done.zalando_scraper import ZalandoScraper
 from .scrapers.done.linkedin_guest_jobs import LinkedInGuestJobsClient
 import time
 import requests
@@ -134,6 +139,14 @@ class JobCrawlerController:
         'workday': WorkdayScraper,
         'myworkdayjobs': WorkdayScraper,
         'phenom': PhenomScraper,
+        'teamtailor': TeamtailorScraper,
+        'softgarden': SoftgardenScraper,
+        'zalando': ZalandoScraper,
+        'custom-zalando': ZalandoScraper,
+        'frequenz': FrequenzScraper,
+        'custom-frequenz': FrequenzScraper,
+        'forto': FortoScraper,
+        'custom-forto': FortoScraper,
         'linkedin': LinkedInGuestJobsClient,
     }
     
@@ -360,14 +373,19 @@ class JobCrawlerController:
         if pd.isna(label) or not label:
             return None
 
-        normalized_label = label.lower().strip().replace(' ', '').replace('-', '')
+        raw_label = label.lower().strip().replace(' ', '')
+        if raw_label in self.SCRAPER_MAP:
+            return self.SCRAPER_MAP[raw_label]
+
+        normalized_label = raw_label.replace('-', '')
 
         if normalized_label in self.SCRAPER_MAP:
             return self.SCRAPER_MAP[normalized_label]
 
         matches = []
         for key, scraper_class in self.SCRAPER_MAP.items():
-            if key in normalized_label or normalized_label in key:
+            normalized_key = key.lower().strip().replace(' ', '').replace('-', '')
+            if normalized_key in normalized_label or normalized_label in normalized_key:
                 matches.append((len(key), scraper_class))
 
         if matches:

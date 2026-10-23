@@ -24,6 +24,10 @@ def extract_boards(text: str):
                 slug.lower() in BAD_SLUGS
                 or len(slug) < 2
                 or (ats == "workday" and slug.split("/", 1)[-1].lower() in BAD_SLUGS | {"job", "details", "search"})
+                or (
+                    ats in {"teamtailor", "softgarden"}
+                    and slug.lower() in BAD_SLUGS | {"app", "www", "career"}
+                )
             ):
                 continue
             key_slug = slug if ats in {"smartrecruiters", "workday"} else slug.lower()
@@ -35,6 +39,10 @@ def career_page(ats: str, slug: str, region: str) -> str:
     slug = urllib.parse.quote(slug, safe="._-~")
     if ats == "workday":
         return _workday_career_page(urllib.parse.unquote(slug), region)
+    if ats == "teamtailor":
+        return f"https://{slug}.teamtailor.com/jobs"
+    if ats == "softgarden":
+        return f"https://{slug}.softgarden.io/en/vacancies"
     return {
         "ashby": f"https://jobs.ashbyhq.com/{slug}",
         "greenhouse": f"https://boards.greenhouse.io/{slug}",

@@ -22,6 +22,8 @@ import pandas as pd
 from ..company_catalog import normalize_url
 from ..job_taxonomy import classify_role
 from ..postgres_storage import PostgresJobStorage
+from ..scrapers.done.softgarden_scraper import SoftgardenScraper
+from ..scrapers.done.teamtailor_scraper import TeamtailorScraper
 from ..scrapers.done.workday_scraper import WorkdayScraper
 from .boards import career_page, extract_boards
 from .constants import (
@@ -512,6 +514,21 @@ class DiscoveryRunner:
                     tenant,
                     label="workday",
                 ):
+                    jobs.append({
+                        "title": job.get("Job Title", ""),
+                        "location": job.get("Location", ""),
+                        "text": job.get("Job Description", "")[:4000],
+                    })
+            elif ats in {"teamtailor", "softgarden"}:
+                name = slug
+                scraper_class = TeamtailorScraper if ats == "teamtailor" else SoftgardenScraper
+                scraper = scraper_class(delay=0)
+                for job in scraper.scrape_jobs(
+                    career_page(ats, slug, region),
+                    slug,
+                    label=ats,
+                ):
+                    name = job.get("Company Name") or name
                     jobs.append({
                         "title": job.get("Job Title", ""),
                         "location": job.get("Location", ""),

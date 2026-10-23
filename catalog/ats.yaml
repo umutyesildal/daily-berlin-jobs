@@ -37,3 +37,11 @@ ats:
   - id: workday
     aliases: [myworkdayjobs, Workday]
   - id: phenom
+  - id: teamtailor
+  - id: softgarden
+  - id: zalando
+    aliases: [custom-zalando]
+  - id: frequenz
+    aliases: [custom-frequenz]
+  - id: forto
+    aliases: [custom-forto]

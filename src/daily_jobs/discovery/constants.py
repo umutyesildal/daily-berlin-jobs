@@ -3,6 +3,7 @@ import re
 ATS_DOMAINS = [
     "ashbyhq.com", "greenhouse.io", "lever.co", "personio.de", "personio.com",
     "recruitee.com", "workable.com", "smartrecruiters.com", "myworkdayjobs.com",
+    "teamtailor.com", "softgarden.io",
 ]
 
 NEBIUS_MODEL = "Qwen/Qwen3-235B-A22B-Instruct-2507"
@@ -26,7 +27,8 @@ AGGREGATOR_DOMAINS = {
 
 SOCIAL_OR_NOISE = AGGREGATOR_DOMAINS | {
     "ashbyhq.com", "greenhouse.io", "lever.co", "personio.de", "personio.com", "recruitee.com",
-    "workable.com", "smartrecruiters.com", "w3.org", "schema.org", "gstatic.com", "googleapis.com",
+    "workable.com", "smartrecruiters.com", "teamtailor.com", "softgarden.io",
+    "w3.org", "schema.org", "gstatic.com", "googleapis.com",
     "cloudfront.net", "amazonaws.com", "gdpr-info.eu", "eur-lex.europa.eu", "bit.ly", "goo.gl",
     "calendly.com", "notion.site", "typeform.com", "vimeo.com", "spotify.com", "tiktok.com",
     "glassdoor.co.uk", "kununu.de", "bundesagentur.de", "arbeitsagentur.de",
@@ -50,6 +52,8 @@ BOARD_PATTERNS = [
             re.I,
         ),
     ),
+    ("teamtailor", re.compile(r"([a-z0-9-]+)\.teamtailor\.com", re.I)),
+    ("softgarden", re.compile(r"([a-z0-9-]+)\.softgarden\.io", re.I)),
 ]
 
 BAD_SLUGS = {"", "api", "embed", "v0", "v1", "jobs", "job", "careers", "www", "app", "j", "js", "static",
