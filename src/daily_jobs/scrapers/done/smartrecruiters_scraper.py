@@ -7,6 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 import time
+import unicodedata
 from typing import List, Dict
 from urllib.parse import urlparse
 import re
@@ -77,8 +78,142 @@ class SmartRecruitarsScraper:
         if company is None:
             logger.error(f"Invalid SmartRecruiters URL: {url}")
             return jobs
-        
-        # Set headers
+
+        postings = self._fetch_public_postings(company)
+        if postings is None:
+            return self._scrape_widget(company, section, company_name, company_description, label)
+
+        for posting in postings:
+            location = posting.get('location') or {}
+            full_location = str(location.get('fullLocation') or '').strip()
+            if not full_location:
+                full_location = ', '.join(
+                    str(value).strip()
+                    for value in (location.get('city'), location.get('country'))
+                    if value
+                )
+            berlin = 'berlin' in full_location.casefold()
+            detail = self._fetch_job_detail(company, posting.get('id')) if berlin else None
+            description = self._job_description(detail)
+            department = posting.get('department') or {}
+            employment_type = posting.get('typeOfEmployment') or {}
+            jobs.append({
+                'Company Name': company_name,
+                'Job Title': posting.get('name', ''),
+                'Location': full_location,
+                'Job Link': self._posting_url(company, posting, detail),
+                'Job Description': description,
+                'Employment Type': employment_type.get('label', '') if isinstance(employment_type, dict) else '',
+                'Department': department.get('label', '') if isinstance(department, dict) else '',
+                'Posted Date': str(posting.get('releasedDate') or '').split('T')[0],
+                'Company Description': company_description,
+                'Remote': 'Yes' if location.get('remote') else 'No',
+                'Label': label,
+                'ATS': 'SmartRecruiters',
+            })
+        return jobs
+
+    def _fetch_public_postings(self, company: str):
+        api_url = f"https://api.smartrecruiters.com/v1/companies/{company}/postings"
+        postings = []
+        offset = 0
+        total_found = None
+
+        while offset < 1000:
+            limit = min(100, 1000 - len(postings))
+            try:
+                response = self.session.get(
+                    api_url,
+                    params={'limit': limit, 'offset': offset},
+                    timeout=30,
+                )
+                if response.status_code == 404:
+                    return None
+                response.raise_for_status()
+                payload = response.json()
+            except (requests.exceptions.RequestException, ValueError):
+                return None
+
+            content = payload.get('content') if isinstance(payload, dict) else None
+            if not isinstance(content, list) or not content:
+                return None
+            if total_found is None:
+                try:
+                    total_found = int(payload.get('totalFound', len(content)))
+                except (TypeError, ValueError):
+                    return None
+                if total_found <= 0:
+                    total_found = len(content)
+
+            postings.extend(content[:1000 - len(postings)])
+            offset += len(content)
+            if offset >= total_found or len(postings) >= 1000:
+                break
+            if self.delay:
+                time.sleep(self.delay)
+        return postings
+
+    @staticmethod
+    def _posting_url(company: str, posting: Dict, detail=None) -> str:
+        posting_url = (detail or {}).get('postingUrl') or posting.get('postingUrl')
+        if posting_url:
+            return str(posting_url)
+        job_id = str(posting.get('id') or '')
+        if not job_id:
+            return ''
+        title = str(posting.get('name') or '')
+        if not title:
+            return f"https://jobs.smartrecruiters.com/{company}/{job_id}"
+        ascii_title = unicodedata.normalize('NFKD', title).encode('ascii', 'ignore').decode().casefold()
+        slug = re.sub(r'[^a-z0-9]+', '-', ascii_title)
+        if not slug:
+            return f"https://jobs.smartrecruiters.com/{company}/{job_id}"
+        return f"https://jobs.smartrecruiters.com/{company}/{job_id}-{slug}"
+
+    def _fetch_job_detail(self, company: str, job_id: str):
+        if not job_id:
+            return None
+        detail_url = f"https://api.smartrecruiters.com/v1/companies/{company}/postings/{job_id}"
+        try:
+            response = self.session.get(detail_url, timeout=30)
+            response.raise_for_status()
+            return response.json()
+        except (requests.exceptions.RequestException, ValueError):
+            return None
+        finally:
+            if self.delay:
+                time.sleep(self.delay)
+
+    @staticmethod
+    def _job_description(detail) -> str:
+        if not isinstance(detail, dict):
+            return ''
+        job_ad = detail.get('jobAd') or {}
+        if not isinstance(job_ad, dict):
+            return ''
+        sections = job_ad.get('sections') or {}
+        if isinstance(sections, dict):
+            values = sections.values()
+        elif isinstance(sections, list):
+            values = sections
+        else:
+            return ''
+        description = ' '.join(
+            str(section.get('text') or '')
+            for section in values
+            if isinstance(section, dict) and section.get('text')
+        )
+        return BeautifulSoup(description, 'html.parser').get_text(separator=' ', strip=True)
+
+    def _scrape_widget(
+        self,
+        company: str,
+        section: str,
+        company_name: str,
+        company_description: str,
+        label: str,
+    ) -> List[Dict]:
+        jobs = []
         headers = {
             'accept': '*/*',
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36',

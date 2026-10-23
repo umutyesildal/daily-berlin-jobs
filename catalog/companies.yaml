@@ -1051,3 +1051,262 @@ companies:
   description: 'Added by ATS discovery on 2026-10-23: personio board with 8 Berlin engineering roles at verification.'
   active: true
   verified_at: '2026-10-23T10:28:42Z'
+- name: ABOUT YOU
+  website: https://aboutyou.de
+  career_page: https://careers.smartrecruiters.com/ABOUTYOUGmbH
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 21 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: AeroVect
+  website: https://aerovect.com
+  career_page: https://jobs.ashbyhq.com/aerovect
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Ashby
+  website: https://ashby.io
+  career_page: https://jobs.ashbyhq.com/ashby
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Atolls
+  website: https://atolls.com
+  career_page: https://boards.greenhouse.io/atolls
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: AutoScout24
+  website: https://autoscout24.com
+  career_page: https://boards.greenhouse.io/autoscout24
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Avaloq
+  website: https://avaloq.com
+  career_page: https://careers.smartrecruiters.com/Avaloq1
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Axel Springer Tech GmbH
+  website: https://axelspringer.com
+  career_page: https://careers.smartrecruiters.com/AxelSpringerNewsMediaNational
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Bitlane
+  website: https://bitlane.io
+  career_page: https://careers.smartrecruiters.com/Bitlane
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Checkly
+  website: https://checklyhq.com
+  career_page: https://jobs.ashbyhq.com/checkly
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Clipbook
+  website: https://clipbook.com
+  career_page: https://jobs.ashbyhq.com/clipbook
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Complevo
+  website: https://complevo.de
+  career_page: https://careers.smartrecruiters.com/Complevo
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: CuspAI
+  website: https://cuspai.io
+  career_page: https://jobs.ashbyhq.com/cuspai
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Deepslate
+  website: https://deepslate.eu
+  career_page: https://jobs.ashbyhq.com/deepslate
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: DEPT®
+  website: https://dept.global
+  career_page: https://boards.greenhouse.io/dept
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: ElevenLabs
+  website: https://elevenlabs.io
+  career_page: https://jobs.ashbyhq.com/elevenlabs
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: FANtium
+  website: https://fantium.com
+  career_page: https://careers.smartrecruiters.com/fantium
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: GROPYUS
+  website: https://gropyus.com
+  career_page: https://boards.greenhouse.io/gropyus
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: IONOS
+  website: https://ionos.com
+  career_page: https://boards.greenhouse.io/ionos2
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Kayzen
+  website: https://kayzen.io
+  career_page: https://careers.smartrecruiters.com/Kayzen1
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: keylight
+  website: https://keylight.com
+  career_page: https://careers.smartrecruiters.com/Keylight
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Kraken Technologies
+  website: https://kraken.tech
+  career_page: https://jobs.ashbyhq.com/krakentech
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: LeasingMarkt.de
+  website: https://leasingmarkt.de
+  career_page: https://boards.greenhouse.io/leasingmarkt
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Mimica
+  website: https://mimica.ai
+  career_page: https://jobs.ashbyhq.com/mimica
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Mistral
+  website: https://mistral.ai
+  career_page: https://jobs.ashbyhq.com/mistral.ai
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: MotherDuck
+  website: https://motherduck.com
+  career_page: https://jobs.ashbyhq.com/motherduck
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Numa
+  website: https://numa.com
+  career_page: https://boards.greenhouse.io/numagroupgmbh
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Ojin
+  website: https://ojin.ai
+  career_page: https://boards.greenhouse.io/ojin
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Orcrist Technologies
+  website: https://orcrist.org
+  career_page: https://boards.greenhouse.io/orcristtechnologies
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Plentific
+  website: https://plentific.com
+  career_page: https://jobs.ashbyhq.com/plentific
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Qdrant
+  website: https://qdrant.tech
+  career_page: https://jobs.ashbyhq.com/qdrant.tech
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Redcare Pharmacy
+  website: https://redcare-pharmacy.com
+  career_page: https://careers.smartrecruiters.com/Redcare-Pharmacy
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 8 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: RepRisk
+  website: https://reprisk.com
+  career_page: https://careers.smartrecruiters.com/RepRiskAG
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Scalable
+  website: https://scalable.capital
+  career_page: https://careers.smartrecruiters.com/ScalableGmbH
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 20 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Smart Pricer
+  website: https://smart-pricer.com
+  career_page: https://careers.smartrecruiters.com/SmartPricerGmbH
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: SWARCO ITS
+  website: https://swarco.com
+  career_page: https://careers.smartrecruiters.com/SWARCO
+  ats: smartrecruiters
+  description: 'Added by ATS discovery on 2026-10-23: smartrecruiters board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: thinkcell
+  website: https://thinkcell.com
+  career_page: https://boards.greenhouse.io/think-cell
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'
+- name: Zasta
+  website: https://zasta.de
+  career_page: https://zasta-gmbh.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T12:26:10Z'

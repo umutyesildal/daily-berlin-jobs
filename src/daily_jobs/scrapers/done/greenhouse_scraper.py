@@ -11,6 +11,19 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger(__name__)
 
 
+def _office_berlin_location(office: dict) -> str:
+    office_name = str(office.get('name') or '')
+    office_location = office.get('location') or ''
+    if isinstance(office_location, dict):
+        office_location = office_location.get('name') or office_location.get('location') or ''
+    office_location = str(office_location)
+    if 'berlin' in office_location.casefold():
+        return office_location
+    if 'berlin' in office_name.casefold():
+        return office_name
+    return ''
+
+
 class GreenhouseScraper:
     def __init__(self, delay: float = 0.2):
         self.delay = delay
@@ -54,15 +67,32 @@ class GreenhouseScraper:
                 try:
                     # Get location name
                     location = job_data.get('location', {})
-                    location_name = location.get('name', '') if isinstance(location, dict) else str(location)
+                    location_name = (
+                        str(location.get('name') or '')
+                        if isinstance(location, dict)
+                        else str(location or '')
+                    )
                     
                     # Get departments
                     departments = job_data.get('departments', [])
                     department = departments[0].get('name', '') if departments else ''
                     
                     # Get offices
-                    offices = job_data.get('offices', [])
-                    office_names = ', '.join([office.get('name', '') for office in offices]) if offices else location_name
+                    offices = job_data.get('offices') or []
+                    office_names = ', '.join(
+                        str(office.get('name') or '') for office in offices if isinstance(office, dict)
+                    ) if offices else location_name
+                    base_location = location_name or office_names
+                    location_value = base_location
+                    if 'berlin' not in base_location.casefold():
+                        berlin_location = ''
+                        for office in offices:
+                            if isinstance(office, dict):
+                                berlin_location = _office_berlin_location(office)
+                                if berlin_location:
+                                    break
+                        if berlin_location:
+                            location_value = f'{base_location} / {berlin_location}' if base_location else berlin_location
                     
                     # Clean HTML content
                     content_html = job_data.get('content', '')
@@ -71,7 +101,7 @@ class GreenhouseScraper:
                     job = {
                         'Company Name': company_name,
                         'Job Title': job_data.get('title', ''),
-                        'Location': office_names or location_name,
+                        'Location': location_value,
                         'Job Link': job_data.get('absolute_url', ''),
                         'Job Description': content_plain,
                         'Employment Type': '',  # Greenhouse doesn't provide this in API
@@ -90,4 +120,3 @@ class GreenhouseScraper:
             pass
         
         return jobs
-
