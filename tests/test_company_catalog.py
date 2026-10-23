@@ -60,6 +60,8 @@ class CompanyCatalogTests(unittest.TestCase):
             ("custom-zalando", "zalando"),
             ("custom-frequenz", "frequenz"),
             ("custom-forto", "forto"),
+            ("custom-google", "google"),
+            ("api-apple", "apple"),
         ):
             self.assertIs(
                 controller._resolve_scraper_class(legacy),
