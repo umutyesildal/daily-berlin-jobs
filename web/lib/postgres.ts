@@ -139,7 +139,9 @@ export async function getJobsSnapshot(): Promise<JobsSnapshot> {
     client.query<JobRow>(`SELECT ${JOB_COLUMNS} FROM daily_jobs ORDER BY posted_at DESC, first_seen_at DESC`),
     client.query<{ finished_at: string | Date | null; updated_at: string | Date | null }>(
       "SELECT (SELECT finished_at FROM crawl_status) AS finished_at, updated_at FROM data_status",
-    ),
+    ).catch(() => client.query<{ finished_at: null; updated_at: string | Date | null }>(
+      "SELECT NULL AS finished_at, updated_at FROM data_status",
+    )),
   ]);
   const updatedAt = updatedResult.rows[0]?.finished_at ?? updatedResult.rows[0]?.updated_at;
   return {
