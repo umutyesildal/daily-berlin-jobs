@@ -28,6 +28,8 @@ from .scrapers.done.frequenz_scraper import FrequenzScraper
 from .scrapers.done.softgarden_scraper import SoftgardenScraper
 from .scrapers.done.teamtailor_scraper import TeamtailorScraper
 from .scrapers.done.zalando_scraper import ZalandoScraper
+from .scrapers.done.apple_scraper import AppleScraper
+from .scrapers.done.google_scraper import GoogleScraper
 from .scrapers.done.linkedin_guest_jobs import LinkedInGuestJobsClient
 import time
 import requests
@@ -147,6 +149,10 @@ class JobCrawlerController:
         'custom-frequenz': FrequenzScraper,
         'forto': FortoScraper,
         'custom-forto': FortoScraper,
+        'google': GoogleScraper,
+        'custom-google': GoogleScraper,
+        'apple': AppleScraper,
+        'api-apple': AppleScraper,
         'linkedin': LinkedInGuestJobsClient,
     }
     

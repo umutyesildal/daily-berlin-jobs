@@ -45,3 +45,7 @@ ats:
     aliases: [custom-frequenz]
   - id: forto
     aliases: [custom-forto]
+  - id: google
+    aliases: [custom-google]
+  - id: apple
+    aliases: [api-apple]

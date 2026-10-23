@@ -1443,3 +1443,17 @@ companies:
   description: 'Added manually on 2026-10-23: forto source (Berlin headquarters).'
   active: true
   verified_at: '2026-10-23T15:53:54Z'
+- name: Google
+  website: https://www.google.com
+  career_page: https://www.google.com/about/careers/applications/jobs/results?location=Berlin%2C%20Germany&page=1
+  ats: google
+  description: 'Added manually on 2026-10-23: google source with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T18:00:54Z'
+- name: Apple
+  website: https://www.apple.com
+  career_page: https://jobs.apple.com/en-us/search?location=berlin-BER
+  ats: apple
+  description: 'Added manually on 2026-10-23: apple source with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T18:00:54Z'
