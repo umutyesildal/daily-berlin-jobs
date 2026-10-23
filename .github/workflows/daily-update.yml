@@ -46,6 +46,9 @@ jobs:
       - name: Apply database migrations
         run: python scripts/db.py migrate
 
+      - name: Sync company catalog
+        run: python scripts/db.py import-companies catalog/companies.yaml --input-type yaml --skip-existing-boards
+
       - name: Collect ATS jobs
         run: |
           python -m daily_jobs.main \

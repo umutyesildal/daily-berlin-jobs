@@ -11,12 +11,16 @@ import uuid
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from typing import Optional
+from typing import NamedTuple, Optional
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from zoneinfo import ZoneInfo
 
 import pandas as pd
 from dotenv import load_dotenv
+
+from .company_catalog import normalize_url
+from .discovery.boards import extract_boards
+from .discovery.text import norm_name
 
 
 TRACKING_QUERY_PREFIXES = ("utm_",)
@@ -94,6 +98,11 @@ class UpsertStats:
     deleted: int = 0
 
 
+class CompanyUpsertStats(NamedTuple):
+    inserted: int
+    skipped: int
+
+
 class PostgresJobStorage:
     def __init__(self, database_url: Optional[str] = None, retention_days: int = 30):
         configured_url = database_url or os.getenv("DATABASE_URL", "")
@@ -142,10 +151,65 @@ class PostgresJobStorage:
         with self.connect() as connection:
             return pd.read_sql_query(query, connection)
 
-    def upsert_companies(self, dataframe: pd.DataFrame) -> int:
+    def upsert_companies(
+        self,
+        dataframe: pd.DataFrame,
+        skip_existing_boards: bool = False,
+    ) -> CompanyUpsertStats:
         rows = dataframe.fillna("").to_dict(orient="records")
+        inserted = skipped = 0
+
+        def normalized_page(value: object) -> str:
+            try:
+                return normalize_url(value)
+            except ValueError:
+                return str(value or "").strip()
+
         with self.connect() as connection, connection.cursor() as cursor:
+            existing_board_keys: set[tuple[str, str]] = set()
+            existing_pages: set[str] = set()
+            existing_company_names: set[str] = set()
+            if skip_existing_boards:
+                cursor.execute("SELECT career_page FROM career_sources")
+                for (page,) in cursor.fetchall():
+                    normalized = normalized_page(page)
+                    if normalized:
+                        existing_pages.add(normalized)
+                    existing_board_keys.update(
+                        (ats, slug.lower())
+                        for ats, slug, _region in extract_boards(str(page or ""))
+                    )
+                cursor.execute(
+                    """
+                    SELECT c.name FROM companies c
+                    JOIN career_sources s ON s.company_id = c.id
+                    WHERE s.active
+                    """
+                )
+                existing_company_names.update(
+                    norm_name(name) for (name,) in cursor.fetchall() if norm_name(name)
+                )
+
             for row in rows:
+                career_page = row.get("Career Page", row.get("career_page", ""))
+                normalized = normalized_page(career_page)
+                company_name = row.get("Name", row.get("name", ""))
+                normalized_company_name = norm_name(company_name)
+                board_keys = {
+                    (ats, slug.lower())
+                    for ats, slug, _region in extract_boards(str(career_page or ""))
+                }
+                if skip_existing_boards and (
+                    normalized in existing_pages
+                    or bool(board_keys & existing_board_keys)
+                    or (
+                        normalized_company_name
+                        and normalized_company_name in existing_company_names
+                    )
+                ):
+                    skipped += 1
+                    continue
+
                 active_value = row.get("Active", row.get("active", True))
                 active = (
                     active_value
@@ -162,9 +226,9 @@ class PostgresJobStorage:
                     RETURNING id
                     """,
                     (
-                        row.get("Name", ""),
-                        row.get("Website", ""),
-                        row.get("Description", ""),
+                        company_name,
+                        row.get("Website", row.get("website", "")),
+                        row.get("Description", row.get("description", "")),
                         active,
                     ),
                 )
@@ -178,12 +242,36 @@ class PostgresJobStorage:
                     """,
                     (
                         company_id,
-                        row.get("Career Page", ""),
-                        row.get("Label", ""),
+                        career_page,
+                        row.get("Label", row.get("ats", row.get("ATS", ""))),
                         active,
                     ),
                 )
-        return len(rows)
+                inserted += 1
+                if skip_existing_boards:
+                    if normalized:
+                        existing_pages.add(normalized)
+                    existing_board_keys.update(board_keys)
+                    if normalized_company_name:
+                        existing_company_names.add(normalized_company_name)
+        return CompanyUpsertStats(inserted=inserted, skipped=skipped)
+
+    def delete_linkedin_jobs_for_companies(self, names) -> int:
+        normalized_names = {norm_name(name) for name in names if norm_name(name)}
+        if not normalized_names:
+            return 0
+        with self.connect() as connection, connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT id, company_name FROM jobs WHERE lower(coalesce(source,''))='linkedin'"
+            )
+            ids = [
+                job_id for job_id, company_name in cursor.fetchall()
+                if norm_name(company_name) in normalized_names
+            ]
+            if not ids:
+                return 0
+            cursor.execute("DELETE FROM jobs WHERE id = ANY(%s)", (ids,))
+            return cursor.rowcount
 
     def record_company_suggestion(
         self,

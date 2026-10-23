@@ -1,3 +1,1053 @@
 # Maintainer-approved sources belong here. Community PRs may add one focused
 # entry; production changes still require validation and a maintainer import.
-companies: []
+companies:
+- name: 1GLOBAL
+  website: https://1global.com
+  career_page: https://apply.workable.com/1global
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: 1KOMMA5°
+  website: https://1komma5.com
+  career_page: https://1komma5grad.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 7 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Affinidi
+  website: https://affinidi.com
+  career_page: https://boards.greenhouse.io/affinidi
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: AIRMO
+  website: https://airmo.com
+  career_page: https://airmo.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Almetra
+  website: https://almetra.ai
+  career_page: https://jobs.ashbyhq.com/almetra
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 6 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: AMBOSS
+  website: https://amboss.com
+  career_page: https://jobs.ashbyhq.com/amboss
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Andercore
+  website: https://andercore.com
+  career_page: https://jobs.ashbyhq.com/andercore
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Arvana
+  website: https://arvana.io
+  career_page: https://arvana.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Augustus
+  website: https://augustus.com
+  career_page: https://jobs.ashbyhq.com/augustus
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Autohaus Royal GmbH
+  website: https://autohaus-royal.de
+  career_page: https://autohaus-royal.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Autonomous Teaming
+  website: https://autonomous-teaming.ai
+  career_page: https://autonomous-teaming.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: AVOW
+  website: https://avow.de
+  career_page: https://avow.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Awin
+  website: https://awin.com
+  career_page: https://boards.greenhouse.io/awin
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: azeti
+  website: https://azeti.net
+  career_page: https://azeti.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Bettermile
+  website: https://bettermile.com
+  career_page: https://jobs.ashbyhq.com/bettermile
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: BIT Capital
+  website: https://8bitcapital.com
+  career_page: https://bitcap.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Bliq
+  website: https://bliq.com
+  career_page: https://bliq.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Bluefish AI
+  website: https://bluefishai.com
+  career_page: https://boards.greenhouse.io/bluefishai
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Bridgemaker
+  website: https://bridgemaker.com
+  career_page: https://bridgemaker-gmbh.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: capmo
+  website: https://capmo.com
+  career_page: https://capmo.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: CarOnSale
+  website: https://caronsale.com
+  career_page: https://boards.greenhouse.io/caronsale
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Circonomit
+  website: https://circonomit.com
+  career_page: https://apply.workable.com/circonomit
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Clera
+  website: https://clera.io
+  career_page: https://jobs.ashbyhq.com/clera
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 11 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Climate Analytics
+  website: https://climateanalytics.org
+  career_page: https://climate.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Cloover
+  website: https://cloover.com
+  career_page: https://cloover.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: CloudFactory
+  website: https://cloudfactory.com
+  career_page: https://apply.workable.com/cloudfactory
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: commercetools
+  website: https://commercetools.com
+  career_page: https://boards.greenhouse.io/commercetools
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 8 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Content Pass
+  website: https://contentpass.io
+  career_page: https://contentpass.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Cortea
+  website: https://cortea.ai
+  career_page: https://jobs.ashbyhq.com/cortea
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Cresta
+  website: https://cresta.com
+  career_page: https://boards.greenhouse.io/cresta
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Data4Life
+  website: https://data4life.care
+  career_page: https://data4life.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Dataciders
+  website: https://dataciders.com
+  career_page: https://dataciders.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: deepset
+  website: https://deepset.ai
+  career_page: https://jobs.ashbyhq.com/deepsetai
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: dida
+  website: https://dida.com
+  career_page: https://dida.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: DigitalService
+  website: https://digitalservice.com
+  career_page: https://boards.greenhouse.io/digitalservice
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Distribusion Technologies
+  website: https://distribusion.com
+  career_page: https://distribusion.recruitee.com
+  ats: recruitee
+  description: 'Added by ATS discovery on 2026-10-23: recruitee board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Doctolib
+  website: https://doctolib.de
+  career_page: https://boards.greenhouse.io/doctolib
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 16 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Eberlein Kunz
+  website: https://eberleinkunz.de
+  career_page: https://eberleinkunz.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: eGroup
+  website: https://egroup.de
+  career_page: https://egroup.recruitee.com
+  ats: recruitee
+  description: 'Added by ATS discovery on 2026-10-23: recruitee board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: emnify
+  website: https://emnify.com
+  career_page: https://boards.greenhouse.io/emnify
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: empit
+  website: https://empit.com
+  career_page: https://empit.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Enpal
+  website: https://enpal.com
+  career_page: https://jobs.ashbyhq.com/enpal
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: FactFinder
+  website: https://fact-finder.com
+  career_page: https://fact-finder.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Fin
+  website: https://fin.ai
+  career_page: https://boards.greenhouse.io/intercom
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: finmid
+  website: https://finmid.com
+  career_page: https://jobs.ashbyhq.com/finmid.com
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: FINNOFLEET P-D-F
+  website: https://finnofleet.com
+  career_page: https://finnofleet.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Finom
+  website: https://finom.co
+  career_page: https://api.eu.lever.co/v0/postings/pnlfin?mode=json
+  ats: lever
+  description: 'Added by ATS discovery on 2026-10-23: lever board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: flaconi
+  website: https://flaconi.de
+  career_page: https://boards.greenhouse.io/flaconi
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Flatiron Health
+  website: https://flatiron.com
+  career_page: https://boards.greenhouse.io/flatironhealth
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Flix
+  website: https://flix.com
+  career_page: https://boards.greenhouse.io/flix
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 8 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Fuchs & Eule
+  website: https://fuchs-eule.de
+  career_page: https://fuchs-eule.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Gallup
+  website: https://gallup.com
+  career_page: https://boards.greenhouse.io/gallup
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: GALVANY
+  website: https://galvany.de
+  career_page: https://jobs.ashbyhq.com/galvany
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: gematik GmbH
+  website: https://gematik.de
+  career_page: https://gematik.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: getolo
+  website: https://getolo.com
+  career_page: https://apply.workable.com/getolo
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: getpress
+  website: https://getpress.ai
+  career_page: https://getpress-gmbh.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Governikus
+  website: https://governikus.de
+  career_page: https://governikus.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Green Fusion
+  website: https://green-fusion.de
+  career_page: https://green-fusion.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Gridfuse
+  website: https://gridfuse.com
+  career_page: https://gridfuse.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Hack The Box
+  website: https://hackthebox.com
+  career_page: https://apply.workable.com/hack-the-box-ltd
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: hexafarms
+  website: https://hexafarms.com
+  career_page: https://hexafarms.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: HOLOPLOT
+  website: https://holoplot.com
+  career_page: https://holoplot.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Hubject
+  website: https://hubject.com
+  career_page: https://hubject-gmbh.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: ICE Services
+  website: https://iceservices.net
+  career_page: https://boards.greenhouse.io/internationalcopyrightenterpriseservices
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: idealo internet GmbH
+  website: https://idealo.com
+  career_page: https://idealocareer.recruitee.com
+  ats: recruitee
+  description: 'Added by ATS discovery on 2026-10-23: recruitee board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Ignite
+  website: https://ignite.co
+  career_page: https://init-ag.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Integral
+  website: https://integral-corp.com
+  career_page: https://jobs.ashbyhq.com/integral-de
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: JetBrains
+  website: https://jetbrains.com
+  career_page: https://boards.greenhouse.io/jetbrains
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: JUNI
+  website: https://juni.com
+  career_page: https://juni.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Kadmos
+  website: https://kadmos.io
+  career_page: https://boards.greenhouse.io/kadmos3
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: KAZIMI
+  website: https://kazimi.com
+  career_page: https://boards.greenhouse.io/kazimi
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: KNIME
+  website: https://knime.com
+  career_page: https://knime.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Knowunity
+  website: https://knowunity.com
+  career_page: https://jobs.ashbyhq.com/knowunity
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Kombo
+  website: https://kombo.dev
+  career_page: https://jobs.ashbyhq.com/kombo
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: koppla
+  website: https://koppla.de
+  career_page: https://koppla.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Kuro
+  website: https://kuro.build
+  career_page: https://jobs.ashbyhq.com/kuro
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: LawZero
+  website: https://lawzero.org
+  career_page: https://boards.greenhouse.io/lawzero
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Legal Hero
+  website: https://legalhero.de
+  career_page: https://legalhero.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: legartis
+  website: https://legartis.com
+  career_page: https://legartis.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Lightspeed
+  website: https://lightspeedhq.com
+  career_page: https://jobs.ashbyhq.com/lightspeedhq
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Liqid
+  website: https://liqid.com
+  career_page: https://jobs.ashbyhq.com/liqid-lig
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Lissi
+  website: https://lissi.id
+  career_page: https://lissi.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Meierhofer
+  website: https://meierhofer.com
+  career_page: https://meierhofer.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Melotech
+  website: https://melotech.ai
+  career_page: https://jobs.ashbyhq.com/melotech
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Mercanis
+  website: https://mercanis.com
+  career_page: https://mercanis.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Mirelo AI
+  website: https://mirelo.ai
+  career_page: https://jobs.ashbyhq.com/mirelo
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Modash
+  website: https://modash.io
+  career_page: https://apply.workable.com/modash
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: MoonPay
+  website: https://moonpay.com
+  career_page: https://api.lever.co/v0/postings/moonpay?mode=json
+  ats: lever
+  description: 'Added by ATS discovery on 2026-10-23: lever board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: NetBird
+  website: https://netbird.io
+  career_page: https://jobs.ashbyhq.com/netbird
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 6 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Neural Frames
+  website: https://neuralframes.com
+  career_page: https://jobs.ashbyhq.com/neuralframes
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: OMMAX
+  website: https://ommax.com
+  career_page: https://ommax.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: PAIR Finance
+  website: https://pairfinance.com
+  career_page: https://pair.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Parloa
+  website: https://parloa.com
+  career_page: https://boards.greenhouse.io/parloa
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 7 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Passionfroot
+  website: https://passionfroot.me
+  career_page: https://jobs.ashbyhq.com/passionfroot
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Peec AI
+  website: https://peec.com
+  career_page: https://jobs.ashbyhq.com/peec
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 7 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Perplexity
+  website: https://perplexity.ai
+  career_page: https://jobs.ashbyhq.com/perplexity
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Pipedrive
+  website: https://pipedrive.com
+  career_page: https://api.lever.co/v0/postings/pipedrive?mode=json
+  ats: lever
+  description: 'Added by ATS discovery on 2026-10-23: lever board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Planet
+  website: https://planet.com
+  career_page: https://boards.greenhouse.io/planetlabs
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 13 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Platform Engineering
+  website: https://platformengineering.org
+  career_page: https://jobs.ashbyhq.com/platform-engineering
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Prior Labs
+  website: https://priorlabs.ai
+  career_page: https://jobs.ashbyhq.com/prior-labs
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Proalpha
+  website: https://proalpha.com
+  career_page: https://boards.greenhouse.io/proalphagroup
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Project Q
+  website: https://project-q.io
+  career_page: https://project-q.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: qlub
+  website: https://qlub.io
+  career_page: https://jobs.ashbyhq.com/qlub
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Quantcast
+  website: https://quantcast.com
+  career_page: https://jobs.ashbyhq.com/quantcast
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Raisin
+  website: https://raisin.com
+  career_page: https://boards.greenhouse.io/raisin
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Reflex Aerospace
+  website: https://reflexaerospace.com
+  career_page: https://reflex-aerospace-gmbh.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: REMATIQ
+  website: https://rematiq.com
+  career_page: https://jobs.ashbyhq.com/rematiq-gmbh
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: RHONDOS
+  website: https://rhondos.com
+  career_page: https://apply.workable.com/rhondos-inc
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Rover
+  website: https://rover.com
+  career_page: https://api.lever.co/v0/postings/rover?mode=json
+  ats: lever
+  description: 'Added by ATS discovery on 2026-10-23: lever board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Rulemapping
+  website: https://rulemapping.com
+  career_page: https://rulemapping.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Scout24 SE
+  website: https://scout24.com
+  career_page: https://boards.greenhouse.io/scout24
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: SEITENBAU GmbH
+  website: https://seitenbau.com
+  career_page: https://seitenbau-gmbh.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 6 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: sensmore
+  website: https://sensmore.com
+  career_page: https://jobs.ashbyhq.com/sensmore
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Smartbroker AG
+  website: https://smartbrokerplus.de
+  career_page: https://smartbroker.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Smartly
+  website: https://smartly.io
+  career_page: https://boards.greenhouse.io/smartlyio
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 4 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Snocks
+  website: https://snocks.com
+  career_page: https://snocks.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Solactive
+  website: https://solactive.com
+  career_page: https://solactive.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 7 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: StackFuel
+  website: https://stackfuel.com
+  career_page: https://jobs.ashbyhq.com/stackfuel
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 7 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Stackmeister
+  website: https://stackmeister.com
+  career_page: https://stackmeister-gmbh.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Sunday Natural
+  website: https://sunday-natural.co.uk
+  career_page: https://jobs.ashbyhq.com/sunday-natural
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Super AI
+  website: https://super-ai.com
+  career_page: https://super-ai.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Superhuman
+  website: https://superhuman.com
+  career_page: https://jobs.ashbyhq.com/superhuman%20platform%20inc
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Talon.One
+  website: https://talon.one
+  career_page: https://boards.greenhouse.io/linkedinjobs
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: The Focusrite Group
+  website: https://focusrite.com
+  career_page: https://apply.workable.com/focusrite
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: thermondo
+  website: https://thermondo.de
+  career_page: https://thermondo.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Thinkport
+  website: https://thinkport.org
+  career_page: https://thinkport-gmbh.jobs.personio.de
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Tide
+  website: https://tide.co
+  career_page: https://boards.greenhouse.io/tide
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Trade Republic
+  website: https://traderepublic.com
+  career_page: https://boards.greenhouse.io/traderepublicbank
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 7 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Travelcircus
+  website: https://travelcircus.com
+  career_page: https://travelcircus.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: trawa
+  website: https://trawa.com
+  career_page: https://jobs.ashbyhq.com/trawa
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Ubiquiti Inc.
+  website: https://ubiquiti.com
+  career_page: https://boards.greenhouse.io/ubiquiti
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Upvest
+  website: https://upvest.co
+  career_page: https://jobs.ashbyhq.com/upvest
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Vinted
+  website: https://vinted.com
+  career_page: https://boards.greenhouse.io/vinteden
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 8 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Voyfai
+  website: https://voyfai.com
+  career_page: https://jobs.ashbyhq.com/voyfai
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: VREY
+  website: https://vrey.io
+  career_page: https://jobs.ashbyhq.com/vrey
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Wallround
+  website: https://wallround.de
+  career_page: https://wallround.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Wire Germany GmbH
+  website: https://wire.com
+  career_page: https://wire-1.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: WongDoody
+  website: https://wongdoody.com
+  career_page: https://boards.greenhouse.io/wongdoody
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Wooga
+  website: https://wooga.com
+  career_page: https://boards.greenhouse.io/wooga
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Workato
+  website: https://workato.com
+  career_page: https://boards.greenhouse.io/workato
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 6 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Xcelirate
+  website: https://xcelirate.com
+  career_page: https://apply.workable.com/xcelirate
+  ats: workable
+  description: 'Added by ATS discovery on 2026-10-23: workable board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Xempus
+  website: https://xempus.ai
+  career_page: https://xempus.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: XITASO
+  website: https://xitaso.com
+  career_page: https://xitaso.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 5 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: XoLife
+  website: https://xo-life.com
+  career_page: https://xolife.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 3 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: XU Group
+  website: https://xu.de
+  career_page: https://xu-de.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Yazio
+  website: https://yazio.com
+  career_page: https://jobs.ashbyhq.com/yazio
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Zattoo
+  website: https://zattoo.com
+  career_page: https://boards.greenhouse.io/zattoo
+  ats: greenhouse
+  description: 'Added by ATS discovery on 2026-10-23: greenhouse board with 2 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Zauber
+  website: https://zauber.com
+  career_page: https://jobs.ashbyhq.com/zauber
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: Zenjob
+  website: https://zenjob.com
+  career_page: https://jobs.ashbyhq.com/zenjob
+  ats: ashby
+  description: 'Added by ATS discovery on 2026-10-23: ashby board with 1 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'
+- name: zollsoft
+  website: https://zollsoft.de
+  career_page: https://zollsoft.jobs.personio.com
+  ats: personio
+  description: 'Added by ATS discovery on 2026-10-23: personio board with 8 Berlin engineering roles at verification.'
+  active: true
+  verified_at: '2026-10-23T10:28:42Z'

@@ -1,0 +1,77 @@
+name: Weekly ATS Discovery
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+    inputs:
+      budget_discovery:
+        description: Tavily discovery request budget
+        type: string
+        required: false
+        default: "150"
+      budget_resolve:
+        description: Tavily company-resolution request budget
+        type: string
+        required: false
+        default: "150"
+      dry_run:
+        description: Do not add companies or board decisions
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ats-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+      TAVILY_API_KEY_DISCOVERY: ${{ secrets.TAVILY_API_KEY_DISCOVERY }}
+      TAVILY_API_KEY_RESOLVE: ${{ secrets.TAVILY_API_KEY_RESOLVE }}
+      NEBIUS_API_KEY: ${{ secrets.NEBIUS_API_KEY }}
+      BUDGET_DISCOVERY: ${{ inputs.budget_discovery || '150' }}
+      BUDGET_RESOLVE: ${{ inputs.budget_resolve || '150' }}
+      DRY_RUN: ${{ inputs.dry_run }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip install --disable-pip-version-check -e .
+
+      - name: Apply database migrations
+        run: python scripts/db.py migrate
+
+      - name: Discover and verify ATS boards
+        run: |
+          set -o pipefail
+          args=(--budget-discovery "$BUDGET_DISCOVERY" --budget-resolve "$BUDGET_RESOLVE" --report ats-discovery-report.json)
+          if [ "$DRY_RUN" = "true" ]; then
+            args+=(--dry-run)
+          fi
+          python -m daily_jobs.discovery "${args[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload discovery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ats-discovery-report-${{ github.run_id }}
+          path: ats-discovery-report.json
+          if-no-files-found: ignore
+          retention-days: 14

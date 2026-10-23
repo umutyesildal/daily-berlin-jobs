@@ -20,6 +20,11 @@ def main() -> int:
     storage = PostgresJobStorage(retention_days=30)
     storage.migrate()
     with storage.connect() as connection, connection.cursor() as cursor:
+        cursor.execute("SELECT to_regclass(%s), to_regclass(%s)", (
+            "public.discovery_search_cache",
+            "public.discovered_boards",
+        ))
+        assert all(cursor.fetchone())
         cursor.execute(
             "TRUNCATE company_suggestion_events, company_suggestions, career_sources, companies, "
             "jobs, job_url_aliases, job_fingerprints, crawl_runs RESTART IDENTITY CASCADE"
@@ -76,9 +81,60 @@ def main() -> int:
         source_url="https://github.com/example/repo/issues/999001",
         actor="smoke-test",
     )
+    company_source = pd.DataFrame([{
+        "Name": "Discovery Smoke Company",
+        "Website": "https://discovery-smoke.example",
+        "Career Page": "https://jobs.ashbyhq.com/discovery-smoke",
+        "Description": "Disposable discovery smoke-test source",
+        "Label": "ashby",
+        "Active": True,
+    }])
+    company_upsert = storage.upsert_companies(company_source, skip_existing_boards=True)
+    assert company_upsert == (1, 0), company_upsert
+    repeated_company_upsert = storage.upsert_companies(company_source, skip_existing_boards=True)
+    assert repeated_company_upsert == (0, 1), repeated_company_upsert
+    board_alias_source = company_source.copy()
+    board_alias_source.loc[0, "Name"] = "Discovery Smoke Company Alias"
+    board_alias_source.loc[0, "Career Page"] = (
+        "https://api.ashbyhq.com/posting-api/job-board/discovery-smoke"
+    )
+    board_alias_upsert = storage.upsert_companies(board_alias_source, skip_existing_boards=True)
+    assert board_alias_upsert == (0, 1), board_alias_upsert
+    existing_company = pd.DataFrame([{
+        "Name": "Acme Systems GmbH",
+        "Website": "https://acme-systems.example",
+        "Career Page": "https://jobs.ashbyhq.com/acme-systems",
+        "Description": "Existing active source",
+        "Label": "ashby",
+        "Active": True,
+    }])
+    assert storage.upsert_companies(existing_company) == (1, 0)
+    alternate_source = pd.DataFrame([{
+        "Name": "Acme Systems",
+        "Website": "https://new-acme-systems.example",
+        "Career Page": "https://boards.greenhouse.io/acme-systems",
+        "Description": "Incoming duplicate company",
+        "Label": "greenhouse",
+        "Active": True,
+    }])
+    company_name_skip = storage.upsert_companies(alternate_source, skip_existing_boards=True)
+    assert company_name_skip == (0, 1), company_name_skip
     with storage.connect() as connection, connection.cursor() as cursor:
         cursor.execute("SELECT active FROM companies WHERE name = %s", ("München Labs",))
         assert cursor.fetchone()[0] is False
+        cursor.execute(
+            "SELECT count(*) FROM career_sources WHERE career_page = %s",
+            ("https://jobs.ashbyhq.com/discovery-smoke",),
+        )
+        assert cursor.fetchone()[0] == 1
+        cursor.execute("SELECT website FROM companies WHERE name = %s", ("Acme Systems GmbH",))
+        assert cursor.fetchone()[0] == "https://acme-systems.example"
+        cursor.execute(
+            "SELECT count(*) FROM career_sources WHERE company_id = "
+            "(SELECT id FROM companies WHERE name = %s)",
+            ("Acme Systems GmbH",),
+        )
+        assert cursor.fetchone()[0] == 1
         cursor.execute("SELECT count(*) FROM jobs")
         assert cursor.fetchone()[0] == 1, "Disabling a company must preserve historical jobs"
         cursor.execute(
@@ -119,9 +175,59 @@ def main() -> int:
         assert cursor.fetchone()[0] == 0
         cursor.execute("RESET ROLE")
 
+    replacement_rows = pd.DataFrame([
+        {
+            **common,
+            "Company Name": "München Labs GmbH",
+            "Job Title": "LinkedIn version of role",
+            "Job Link": "https://www.linkedin.com/jobs/view/992200",
+            "ATS": "LinkedIn",
+        },
+        {
+            **common,
+            "Company Name": "München Labs GmbH",
+            "Job Title": "ATS version of role",
+            "Job Link": "https://example.com/jobs/ats-version",
+            "ATS": "greenhouse",
+        },
+        {
+            **common,
+            "Company Name": "Unrelated LinkedIn Company",
+            "Job Title": "Unrelated LinkedIn role",
+            "Job Link": "https://www.linkedin.com/jobs/view/992201",
+            "ATS": "LinkedIn",
+        },
+    ])
+    replacement_stats = storage.upsert_jobs(replacement_rows)
+    assert replacement_stats.inserted == 3, replacement_stats
+    with storage.connect() as connection, connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT identity_key FROM jobs WHERE title = %s",
+            ("LinkedIn version of role",),
+        )
+        linkedin_identity = cursor.fetchone()[0]
+    deleted_linkedin = storage.delete_linkedin_jobs_for_companies(["Munchen Labs"])
+    assert deleted_linkedin == 1, deleted_linkedin
+    with storage.connect() as connection, connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT count(*) FROM jobs WHERE company_name = %s AND title = %s",
+            ("München Labs GmbH", "ATS version of role"),
+        )
+        assert cursor.fetchone()[0] == 1
+        cursor.execute(
+            "SELECT count(*) FROM jobs WHERE company_name = %s",
+            ("Unrelated LinkedIn Company",),
+        )
+        assert cursor.fetchone()[0] == 1
+        cursor.execute("SELECT count(*) FROM jobs WHERE source = 'LinkedIn'")
+        assert cursor.fetchone()[0] == 1
+        cursor.execute("SELECT count(*) FROM job_fingerprints WHERE identity_key = %s", (linkedin_identity,))
+        assert cursor.fetchone()[0] == 1
+
     print(
         "PostgreSQL smoke: migrations, moderated company sync, historical-job preservation, "
-        "semantic dedup, URL mutation, expiry skip, and 30-day deletion passed"
+        "semantic dedup, URL mutation, expiry skip, 30-day deletion, company board skipping, "
+        "and ATS-over-LinkedIn replacement passed"
     )
     return 0
 
