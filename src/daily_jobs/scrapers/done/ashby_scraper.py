@@ -10,6 +10,30 @@ from typing import List, Dict
 logger = logging.getLogger(__name__)
 
 
+def _location_with_berlin(job_data: Dict) -> str:
+    primary = str(job_data.get('location') or '')
+    if 'berlin' in primary.casefold():
+        return primary
+
+    berlin_location = ''
+    for secondary in job_data.get('secondaryLocations') or []:
+        location = str(secondary.get('location') or '') if isinstance(secondary, dict) else str(secondary or '')
+        if 'berlin' in location.casefold():
+            berlin_location = location
+            break
+
+    if not berlin_location:
+        address = job_data.get('address') or {}
+        postal_address = (address.get('postalAddress') or {}) if isinstance(address, dict) else {}
+        locality = str(postal_address.get('addressLocality') or '')
+        if 'berlin' in locality.casefold():
+            berlin_location = locality
+
+    if berlin_location:
+        return f'{primary} / {berlin_location}' if primary else berlin_location
+    return primary
+
+
 class AshbyScraper:
     def __init__(self, delay: float = 0.2):
         self.delay = delay
@@ -50,7 +74,7 @@ class AshbyScraper:
                     job = {
                         'Company Name': company_name,
                         'Job Title': job_data.get('title', ''),
-                        'Location': job_data.get('location', ''),
+                        'Location': _location_with_berlin(job_data),
                         'Job Link': job_data.get('jobUrl', ''),
                         'Job Description': job_data.get('descriptionPlain', ''),
                         'Employment Type': job_data.get('employmentType', ''),
@@ -69,4 +93,3 @@ class AshbyScraper:
             pass
         
         return jobs
-
