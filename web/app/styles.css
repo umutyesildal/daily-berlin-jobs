@@ -111,5 +111,13 @@ button { cursor:pointer; }
 .admin-actions { display:flex; align-items:center; gap:16px; margin:24px 0; }
 .admin-actions a { color:var(--accent); font-size:13px; font-weight:700; }
 .notice { padding:10px 12px; border-radius:10px; background:#e8f5f2; }.error { color:#b42318!important; }
+.source-health-card h2 { margin:6px 0 8px; font-size:20px; }
+.source-health-list { display:grid; gap:12px; margin-top:18px; }
+.source-health-item { display:grid; gap:7px; border-top:1px solid var(--line); padding-top:14px; }
+.source-health-heading { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; }
+.source-health-heading span,.source-health-item p { color:var(--muted); font-size:13px; }
+.source-health-item a { overflow-wrap:anywhere; color:var(--accent); font-size:13px; }
+.source-health-item p { margin:0; line-height:1.45; }
+.source-health-item .source-health-error,.source-health-item .source-health-reason { color:var(--ink); }
 @media(max-width:900px){.filter-bar{grid-template-columns:repeat(2,minmax(0,1fr)) auto auto auto}}
 @media(max-width:720px){.page-shell{width:min(100% - 24px,1280px)}.header-note{display:none}.controls{grid-template-columns:1fr}.filter-bar{grid-template-columns:1fr 1fr}.direct-only-filter{grid-column:1/-1}.clear-filters{justify-self:end;text-align:right}.result-count{grid-column:1/-1;text-align:right}.table-head{display:none}.job-row{grid-template-columns:1fr;gap:8px}.hero{padding:30px 0 24px}.site-footer{align-items:flex-start;gap:14px;flex-direction:column}.admin-card{padding:24px}}

@@ -26,12 +26,47 @@ import time
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
+import re
 from datetime import datetime
 from typing import List, Dict, Optional
 from urllib.parse import urlparse
 import pandas as pd
 import os
 from .report_generator import ReportGenerator
+from .job_taxonomy import classify_role
+
+
+def _safe_source_health_error(error: object) -> Optional[str]:
+    if error is None:
+        return None
+    message = str(error)
+    for name, value in os.environ.items():
+        if value and any(token in name.upper() for token in (
+            "KEY", "TOKEN", "SECRET", "PASSWORD", "DATABASE", "CREDENTIAL", "PAT",
+        )):
+            message = message.replace(value, "[redacted]")
+    message = re.sub(r"https?://[^\s\"'<>]+", "[redacted URL]", message, flags=re.IGNORECASE)
+    message = re.sub(
+        r"(?i)\b(?:authorization|bearer)\s*[:=]?\s*\S+",
+        "[redacted credential]",
+        message,
+    )
+    message = re.sub(
+        r"(?i)\b(api[_-]?key|token|secret|password)\s*[:=]\s*[^&\s]+",
+        r"\1=[redacted]",
+        message,
+    )
+    return message[:300] or None
+
+
+def _source_id_from_row(row: pd.Series) -> Optional[int]:
+    value = row.get("Source ID")
+    if value is None or pd.isna(value):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
 
 
 class DomainRateLimiter:
@@ -102,6 +137,7 @@ class JobCrawlerController:
         self.output_dir = output_dir
         self.failed_companies = []  # Track failed companies
         self.no_jobs_companies = []  # Track companies with no jobs (separate from failures)
+        self.source_health_results = []
         self.rate_limit_issues = []  # Track rate limiting issues
         self.timing_stats = []  # Track timing for each company
         self.request_stats = {
@@ -597,13 +633,38 @@ class JobCrawlerController:
             return jobs
             
         except Exception as e:
-            CrawlerLogger.scraping_error(name, e)
+            CrawlerLogger.scraping_error(name, _safe_source_health_error(e) or "Scraping error")
             return []
     
+    def _record_source_health(
+        self,
+        source_id: Optional[int],
+        status: str,
+        job_count: int = 0,
+        berlin_engineering_count: int = 0,
+        error: object = None,
+        status_code: Optional[int] = None,
+    ) -> None:
+        if source_id is None:
+            return
+        try:
+            status_code = int(status_code) if status_code is not None else None
+        except (TypeError, ValueError):
+            status_code = None
+        self.source_health_results.append({
+            "source_id": int(source_id),
+            "status": status,
+            "job_count": max(0, int(job_count)),
+            "berlin_engineering_count": max(0, int(berlin_engineering_count)),
+            "error": _safe_source_health_error(error),
+            "status_code": status_code,
+        })
+
     def process_companies(self, df: pd.DataFrame, limit: int = None):
 
         # Compare old data and backup
         self.compare_and_backup()
+        self.source_health_results = []
 
         self.run_start_time = time.time()
         self.run_end_time = None
@@ -634,10 +695,12 @@ class JobCrawlerController:
             career_page = row.get('Career Page', '')
             description = row.get('Description', 'N/A')
             label = row.get('Label', 'unknown')
+            source_id = _source_id_from_row(row)
 
             CrawlerLogger.company_start(idx, stats['total_companies'], company_name, label)
 
             if pd.isna(career_page) or not career_page:
+                self._record_source_health(source_id, 'error', error='Missing career page')
                 CrawlerLogger.warning_no_career_page(company_name)
                 stats['failed'] += 1
                 self.failed_companies.append({'Company': company_name, 'Reason': 'No career page'})
@@ -645,6 +708,7 @@ class JobCrawlerController:
                 continue
 
             if pd.isna(label) or not label:
+                self._record_source_health(source_id, 'error', error='Missing ATS platform')
                 CrawlerLogger.warning_no_ats_platform()
                 stats['failed'] += 1
                 self.failed_companies.append({'Company': company_name, 'Reason': 'No ATS platform'})
@@ -653,6 +717,7 @@ class JobCrawlerController:
 
             scraper_class = self._resolve_scraper_class(label)
             if not scraper_class:
+                self._record_source_health(source_id, 'error', error=f'No scraper for {label}')
                 CrawlerLogger.warning_no_scraper(label)
                 stats['failed'] += 1
                 self.failed_companies.append({'Company': company_name, 'Reason': f'No scraper for {label}'})
@@ -665,6 +730,7 @@ class JobCrawlerController:
                 'career_page': career_page,
                 'description': description,
                 'label': label,
+                'source_id': source_id,
                 'scraper_class': scraper_class,
                 'rate_limit_key': self._get_rate_limit_key(career_page)
             })
@@ -684,10 +750,12 @@ class JobCrawlerController:
                         result = future.result()
                     except Exception as exc:
                         elapsed_time = 0.0
+                        safe_error = _safe_source_health_error(exc) or "Unexpected scraping error"
+                        self._record_source_health(task.get('source_id'), 'error', error=safe_error)
                         self.log_company_timing(company_name, elapsed_time, 0, 'error')
-                        CrawlerLogger.company_error(str(exc), elapsed_time)
+                        CrawlerLogger.company_error(safe_error, elapsed_time)
                         stats['failed'] += 1
-                        self.failed_companies.append({'Company': company_name, 'Reason': f'Unexpected error: {str(exc)[:80]}'})
+                        self.failed_companies.append({'Company': company_name, 'Reason': f'Unexpected error: {safe_error[:80]}'})
                         CrawlerLogger.progress_update(stats['successful'], stats['failed'], stats['total_jobs'], stats['new_jobs'])
                         continue
 
@@ -702,6 +770,18 @@ class JobCrawlerController:
                         self.log_request_issue(company_name, 'success', 'Job scraping successful')
 
                         job_count = len(jobs)
+                        berlin_engineering_count = sum(
+                            1
+                            for job in jobs
+                            if 'berlin' in str(job.get('Location') or '').casefold()
+                            and classify_role({'Job Title': job.get('Job Title', '')})
+                        )
+                        self._record_source_health(
+                            task.get('source_id'),
+                            'ok' if job_count else 'empty',
+                            job_count=job_count,
+                            berlin_engineering_count=berlin_engineering_count,
+                        )
                         if job_count:
                             self.log_company_timing(company_name, elapsed_time, job_count, 'success')
                             CrawlerLogger.jobs_found(job_count, company_name)
@@ -752,12 +832,18 @@ class JobCrawlerController:
                         issue_type = issue_type or 'connection_error'
                         if issue_type in ('http_error', 'error'):
                             issue_type = 'connection_error'
-                        message = str(error) if error else 'Unknown error'
+                        message = _safe_source_health_error(error) or 'Unknown error'
+                        self._record_source_health(
+                            task.get('source_id'),
+                            'error',
+                            error=message,
+                            status_code=status_code,
+                        )
                         self.log_request_issue(company_name, issue_type, message, status_code)
                         self.log_company_timing(company_name, elapsed_time, 0, 'error')
 
                         if error is not None:
-                            CrawlerLogger.scraping_error(company_name, error)
+                            CrawlerLogger.scraping_error(company_name, message)
                         CrawlerLogger.company_error(message, elapsed_time)
 
                         if elapsed_time > 60:

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from daily_jobs.discovery import (
     career_page,
@@ -9,7 +9,7 @@ from daily_jobs.discovery import (
     norm_name,
     title_overlap,
 )
-from daily_jobs.discovery.engine import DiscoveryStore, verify_website
+from daily_jobs.discovery.engine import DiscoveryRunner, DiscoveryStore, verify_website
 
 
 class RecordingCursor:
@@ -54,6 +54,82 @@ class DiscoveryStoreTests(unittest.TestCase):
         })
 
         self.assertEqual(connection.params[7], "Acme Labs")
+
+
+class DiscoveryRecoveryTests(unittest.TestCase):
+    def test_recently_auto_disabled_company_is_prioritized_with_empty_titles(self):
+        class InputCursor:
+            def __init__(self):
+                self.rows = []
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def execute(self, query, _params=()):
+                if "FROM jobs" in query:
+                    self.rows = []
+                elif "SELECT career_page FROM career_sources" in query:
+                    self.rows = []
+                elif "source_health" in query:
+                    self.rows = [("Recovered Company",)]
+                else:
+                    raise AssertionError(query)
+
+            def fetchall(self):
+                return self.rows
+
+        class InputConnection:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def cursor(self):
+                return InputCursor()
+
+        class Storage:
+            def connect(self):
+                return InputConnection()
+
+        class InlinePool:
+            def __init__(self, *_args, **_kwargs):
+                pass
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def map(self, function, values):
+                return list(map(function, values))
+
+        runner = DiscoveryRunner(
+            Storage(),
+            None,
+            budget_discovery=10,
+            budget_resolve=10,
+            dry_run=True,
+        )
+        linkedin_titles, _existing_boards = runner.load_inputs()
+        linkedin_titles["Regular Company"] = ["Backend Engineer"]
+        queries = []
+
+        def tavily(query, *_args, **_kwargs):
+            queries.append(query)
+            return {"results": []}
+
+        runner.tavily = tavily
+        with patch("daily_jobs.discovery.engine.ThreadPoolExecutor", InlinePool):
+            runner.stage_resolve(linkedin_titles, set())
+
+        self.assertEqual(linkedin_titles["Recovered Company"], [])
+        self.assertEqual(queries[0], '"Recovered Company" jobs Berlin')
+        self.assertEqual(queries[2], '"Regular Company" jobs Berlin')
 
 
 class BoardExtractionTests(unittest.TestCase):

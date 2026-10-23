@@ -204,6 +204,8 @@ export function JobsBoard({
           <span aria-hidden="true">·</span>
           <a href="/api/v1/status">API</a>
           <span aria-hidden="true">·</span>
+          <a href="/api/mcp">MCP</a>
+          <span aria-hidden="true">·</span>
           <a href="/feed.xml">RSS</a>
           <span aria-hidden="true">·</span>
           <a href="/sitemap.xml">Sitemap</a>

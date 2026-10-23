@@ -253,6 +253,7 @@ class DiscoveryRunner:
         self.scraper_cache: dict[tuple[str, str, str], dict] = {}
         self.llm_cache: dict[tuple, dict | None] = {}
         self.page_cache: dict[str, dict] = {}
+        self.priority_companies: list[str] = []
 
     def tavily(self, query: str, key_name: str, include_domains=None, max_results=20):
         cache_key = {"q": query, "d": include_domains, "n": max_results}
@@ -319,6 +320,24 @@ class DiscoveryRunner:
             for (page,) in cursor.fetchall():
                 for ats, slug, _region in extract_boards(str(page or "")):
                     existing_boards.add((ats, slug.lower()))
+            cursor.execute(
+                """
+                SELECT DISTINCT c.name
+                FROM companies c
+                JOIN career_sources s ON s.company_id = c.id
+                JOIN source_health h ON h.career_source_id = s.id
+                WHERE h.disabled_at > now() - interval '30 days'
+                  AND h.disabled_reason LIKE 'auto:%'
+                  AND NOT EXISTS (
+                      SELECT 1 FROM career_sources active_source
+                      WHERE active_source.company_id = c.id AND active_source.active
+                  )
+                ORDER BY c.name
+                """
+            )
+            self.priority_companies = [str(row[0]) for row in cursor.fetchall()]
+        for company in self.priority_companies:
+            linkedin_titles[company] = []
         return linkedin_titles, existing_boards
 
     def stage_discovery(self, max_rounds=2):
@@ -353,7 +372,12 @@ class DiscoveryRunner:
         return boards, log
 
     def stage_resolve(self, linkedin_titles, already_found_names):
-        companies = sorted(linkedin_titles, key=lambda company: -len(linkedin_titles[company]))
+        prioritized = [company for company in self.priority_companies if company in linkedin_titles]
+        priority_set = set(prioritized)
+        companies = prioritized + sorted(
+            (company for company in linkedin_titles if company not in priority_set),
+            key=lambda company: -len(linkedin_titles[company]),
+        )
         candidates = collections.defaultdict(set)
         site_hints = collections.defaultdict(list)
         todo = [

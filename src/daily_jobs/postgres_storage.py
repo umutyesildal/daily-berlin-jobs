@@ -21,6 +21,7 @@ from dotenv import load_dotenv
 from .company_catalog import normalize_url
 from .discovery.boards import extract_boards
 from .discovery.text import norm_name, norm_title
+from .source_health import next_source_health
 
 
 TRACKING_QUERY_PREFIXES = ("utm_",)
@@ -159,6 +160,7 @@ class PostgresJobStorage:
     def load_companies(self) -> pd.DataFrame:
         query = """
             SELECT c.name AS "Name", c.website AS "Website", s.career_page AS "Career Page",
+                   s.id AS "Source ID",
                    c.description AS "Description", s.ats_label AS "Label", 'active' AS "Active"
             FROM companies c
             JOIN career_sources s ON s.company_id = c.id
@@ -562,3 +564,78 @@ class PostgresJobStorage:
                     )
                 raise
         return stats
+
+    def record_source_health(self, results: list[dict]) -> int:
+        records = [
+            result for result in results
+            if result.get("source_id") is not None and not pd.isna(result.get("source_id"))
+        ]
+        if not records:
+            return 0
+
+        columns = (
+            "last_run_at",
+            "last_status",
+            "last_success_at",
+            "last_job_count",
+            "last_berlin_engineering_count",
+            "consecutive_errors",
+            "consecutive_empty",
+            "last_error",
+            "last_status_code",
+            "disabled_at",
+            "disabled_reason",
+        )
+        now = datetime.now(timezone.utc)
+        with self.connect() as connection, connection.cursor() as cursor:
+            for result in records:
+                source_id = int(result["source_id"])
+                cursor.execute(
+                    f"SELECT {', '.join(columns)} FROM source_health "
+                    "WHERE career_source_id = %s FOR UPDATE",
+                    (source_id,),
+                )
+                previous_row = cursor.fetchone()
+                previous = dict(zip(columns, previous_row)) if previous_row else None
+                state, disable_reason = next_source_health(previous, result, now)
+                cursor.execute(
+                    """
+                    INSERT INTO source_health(
+                        career_source_id, last_run_at, last_status, last_success_at,
+                        last_job_count, last_berlin_engineering_count, consecutive_errors,
+                        consecutive_empty, last_error, last_status_code, disabled_at, disabled_reason
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (career_source_id) DO UPDATE SET
+                        last_run_at = EXCLUDED.last_run_at,
+                        last_status = EXCLUDED.last_status,
+                        last_success_at = EXCLUDED.last_success_at,
+                        last_job_count = EXCLUDED.last_job_count,
+                        last_berlin_engineering_count = EXCLUDED.last_berlin_engineering_count,
+                        consecutive_errors = EXCLUDED.consecutive_errors,
+                        consecutive_empty = EXCLUDED.consecutive_empty,
+                        last_error = EXCLUDED.last_error,
+                        last_status_code = EXCLUDED.last_status_code,
+                        disabled_at = EXCLUDED.disabled_at,
+                        disabled_reason = EXCLUDED.disabled_reason
+                    """,
+                    (
+                        source_id,
+                        state["last_run_at"],
+                        state["last_status"],
+                        state["last_success_at"],
+                        state["last_job_count"],
+                        state["last_berlin_engineering_count"],
+                        state["consecutive_errors"],
+                        state["consecutive_empty"],
+                        state["last_error"],
+                        state["last_status_code"],
+                        state["disabled_at"],
+                        state["disabled_reason"],
+                    ),
+                )
+                if disable_reason:
+                    cursor.execute(
+                        "UPDATE career_sources SET active = false WHERE id = %s",
+                        (source_id,),
+                    )
+        return len(records)

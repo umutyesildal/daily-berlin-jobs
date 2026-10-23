@@ -6,6 +6,18 @@ type Status = {
   run: null | { status: string; conclusion: string | null; html_url: string; updated_at: string };
   progress: number;
   step: string;
+  source_health: {
+    company_name: string;
+    career_page: string;
+    ats_label: string | null;
+    active: boolean;
+    last_status: string | null;
+    consecutive_errors: number;
+    last_status_code: number | null;
+    last_error: string | null;
+    disabled_at: string | null;
+    disabled_reason: string | null;
+  }[];
 };
 
 export function AdminPanel() {
@@ -79,6 +91,33 @@ export function AdminPanel() {
         </div>
         {status?.run?.updated_at && <small>Last activity: {new Date(status.run.updated_at).toLocaleString()}</small>}
         {message && <p className="notice">{message}</p>}
+      </section>
+      <section className="admin-card source-health-card">
+        <span className="eyebrow">Crawler sources</span>
+        <h2>Source health</h2>
+        <p>Failing sources and sources automatically disabled in the last seven days.</p>
+        {status?.source_health?.length ? (
+          <div className="source-health-list">
+            {status.source_health.map((source) => (
+              <article className="source-health-item" key={`${source.company_name}-${source.career_page}`}>
+                <div className="source-health-heading">
+                  <strong>{source.company_name}</strong>
+                  <span>{source.ats_label ?? "Unknown ATS"}</span>
+                </div>
+                <a href={source.career_page} target="_blank" rel="noreferrer">{source.career_page}</a>
+                <p>
+                  {source.consecutive_errors} consecutive errors
+                  {source.last_status_code ? ` · HTTP ${source.last_status_code}` : ""}
+                  {source.last_status ? ` · ${source.last_status}` : ""}
+                </p>
+                {source.last_error && <p className="source-health-error">{source.last_error}</p>}
+                {source.disabled_reason && <p className="source-health-reason">{source.disabled_reason}</p>}
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="notice">No failing or recently disabled sources.</p>
+        )}
       </section>
     </main>
   );

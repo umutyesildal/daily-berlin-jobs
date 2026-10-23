@@ -141,6 +141,7 @@ last successful update, expected refresh window, and supported filters. Query
 `source`, `limit`, and `cursor`; job details are at `/api/v1/jobs/{id}`.
 Markdown is available at `/jobs.md`, `/today.md`, and `/jobs/{id}.md`; `/feed.xml`
 is the RSS feed. Agent guidance is published at `/llms.txt` and `/agents.md`.
+The remote MCP endpoint is `/api/mcp` with the read-only tools `get_status`, `search_jobs`, and `get_job`.
 
 ## Admin panel
 

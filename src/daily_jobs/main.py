@@ -76,6 +76,11 @@ def main():
     # Process companies
     try:
         controller.process_companies(df, limit=args.limit)
+        if args.input_type == 'postgres':
+            try:
+                PostgresJobStorage().record_source_health(controller.source_health_results)
+            except Exception as error:
+                logger.warning("Could not record source health (%s)", type(error).__name__)
         if args.output_sheet:
             output_csv = os.path.join(args.output_dir, 'all_jobs.csv')
             output_ctrl = DataController(output_csv)
