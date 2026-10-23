@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 
 from .company_catalog import normalize_url
 from .discovery.boards import extract_boards
-from .discovery.text import norm_name
+from .discovery.text import norm_name, norm_title
 
 
 TRACKING_QUERY_PREFIXES = ("utm_",)
@@ -68,6 +68,23 @@ def job_keys(row: dict) -> tuple[str, Optional[str], str]:
     identity_key = _digest(company, title, location)
     url_key = _digest(canonical_url) if canonical_url else None
     return identity_key, url_key, canonical_url
+
+
+def linkedin_duplicate_ids(rows) -> list[int]:
+    rows = list(rows)
+    ats_keys = set()
+    for _job_id, company_name, title, source in rows:
+        if str(source or "").lower() != "linkedin":
+            key = (norm_name(company_name), norm_title(title))
+            if key[0] and key[1]:
+                ats_keys.add(key)
+
+    return [
+        int(job_id)
+        for job_id, company_name, title, source in rows
+        if str(source or "").lower() == "linkedin"
+        and (norm_name(company_name), norm_title(title)) in ats_keys
+    ]
 
 
 def _split_list(value: object) -> list[str]:
@@ -256,18 +273,12 @@ class PostgresJobStorage:
                         existing_company_names.add(normalized_company_name)
         return CompanyUpsertStats(inserted=inserted, skipped=skipped)
 
-    def delete_linkedin_jobs_for_companies(self, names) -> int:
-        normalized_names = {norm_name(name) for name in names if norm_name(name)}
-        if not normalized_names:
-            return 0
+    def delete_linkedin_duplicates_of_ats_jobs(self) -> int:
         with self.connect() as connection, connection.cursor() as cursor:
             cursor.execute(
-                "SELECT id, company_name FROM jobs WHERE lower(coalesce(source,''))='linkedin'"
+                "SELECT id, company_name, title, source FROM jobs"
             )
-            ids = [
-                job_id for job_id, company_name in cursor.fetchall()
-                if norm_name(company_name) in normalized_names
-            ]
+            ids = linkedin_duplicate_ids(cursor.fetchall())
             if not ids:
                 return 0
             cursor.execute("DELETE FROM jobs WHERE id = ANY(%s)", (ids,))

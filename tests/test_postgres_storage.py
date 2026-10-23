@@ -1,7 +1,8 @@
 import unittest
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from daily_jobs.postgres_storage import _posted_date, canonicalize_url, job_keys
+
+from daily_jobs.postgres_storage import _posted_date, canonicalize_url, job_keys, linkedin_duplicate_ids
 
 
 class PostgresIdentityTests(unittest.TestCase):
@@ -40,6 +41,20 @@ class PostgresIdentityTests(unittest.TestCase):
             _posted_date("0 hours ago"),
             datetime.now(ZoneInfo("Europe/Berlin")).date(),
         )
+
+
+class LinkedInAtsDedupeTests(unittest.TestCase):
+    def test_only_linkedin_rows_with_retained_ats_twins_are_deleted(self):
+        rows = [
+            (1, "Example GmbH", "Backend Engineer (m/w/d)", "greenhouse"),
+            (2, "Example", "Backend Engineer", "LinkedIn"),
+            (3, "Example", "Data Engineer", "LinkedIn"),
+            (4, "Different Company", "Backend Engineer", "LinkedIn"),
+            (5, "Doctolib SE", "Fullstack Engineer", "ashby"),
+            (6, "Doctolib", "Fullstack Engineer", "LinkedIn"),
+        ]
+
+        self.assertEqual(linkedin_duplicate_ids(rows), [2, 6])
 
 
 if __name__ == "__main__":

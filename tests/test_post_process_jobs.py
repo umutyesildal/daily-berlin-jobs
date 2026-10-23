@@ -12,7 +12,6 @@ from daily_jobs.post_process_jobs import (
     filter_recent_published_jobs,
     find_daily_new_jobs,
     merge_published_jobs,
-    prefer_ats_over_linkedin,
 )
 
 
@@ -83,17 +82,6 @@ class DailyNewJobsTests(unittest.TestCase):
 
 
 class PublishedJobsTests(unittest.TestCase):
-    def test_ats_rows_replace_linkedin_rows_for_same_normalized_company(self):
-        rows = [
-            {"Company Name": "München Labs GmbH", "Job Title": "Backend Engineer", "Label": "greenhouse"},
-            {"Company Name": "Munchen Labs", "Job Title": "Data Engineer", "ATS": "LinkedIn"},
-            {"Company Name": "LinkedIn-only Co", "Job Title": "Software Engineer", "Label": "LinkedIn"},
-        ]
-
-        result = prefer_ats_over_linkedin(pd.DataFrame(rows))
-
-        self.assertEqual(result["Company Name"].tolist(), ["München Labs GmbH", "LinkedIn-only Co"])
-
     def test_all_jobs_keeps_valid_historical_software_roles(self):
         rows = [{
             "Company Name": "Example",

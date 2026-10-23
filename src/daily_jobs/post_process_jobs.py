@@ -17,7 +17,6 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 
 from .data_controller import DataController
-from .discovery.text import norm_name
 from .job_taxonomy import classify_job
 from .linkedin_daily import collect_daily_linkedin_jobs, save_linkedin_daily_jobs
 
@@ -314,39 +313,6 @@ def save_csv(df: pd.DataFrame, path: Path) -> None:
     df.to_csv(path, index=False, encoding="utf-8")
 
 
-def _is_linkedin_row(row) -> bool:
-    return any(
-        pd.notna(row.get(column))
-        and str(row.get(column)).strip().casefold() == "linkedin"
-        for column in ("ATS", "Label")
-    )
-
-
-def _company_name(row) -> str:
-    for column in ("Company Name", "Company", "company_name"):
-        value = row.get(column)
-        if pd.notna(value) and str(value).strip():
-            return str(value)
-    return ""
-
-
-def prefer_ats_over_linkedin(dataframe: pd.DataFrame) -> pd.DataFrame:
-    if dataframe.empty:
-        return dataframe.copy()
-
-    linkedin_rows = dataframe.apply(_is_linkedin_row, axis=1)
-    ats_companies = {
-        norm_name(_company_name(row))
-        for _, row in dataframe.loc[~linkedin_rows].iterrows()
-        if _company_name(row)
-    }
-    keep = [
-        not (_is_linkedin_row(row) and norm_name(_company_name(row)) in ats_companies)
-        for _, row in dataframe.iterrows()
-    ]
-    return dataframe.loc[keep].copy()
-
-
 def append_linkedin_daily_jobs(
     current_df: pd.DataFrame,
     output_path: Path,
@@ -378,8 +344,7 @@ def append_linkedin_daily_jobs(
         return current_df
 
     combined_df = pd.concat([current_df, linkedin_df], ignore_index=True, sort=False).fillna("")
-    normalized_df = DataController().normalize_jobs_dataframe(combined_df)
-    return prefer_ats_over_linkedin(normalized_df)
+    return DataController().normalize_jobs_dataframe(combined_df)
 
 
 def upload_to_sheet(df: pd.DataFrame, spreadsheet: str, worksheet: str, max_upload_lines: int) -> bool:
@@ -468,7 +433,6 @@ def main() -> int:
                     linkedin_df = filter_related_jobs(linkedin_df)
                 combined_df = pd.concat([current_df, linkedin_df], ignore_index=True, sort=False).fillna("")
                 current_df = DataController().normalize_jobs_dataframe(combined_df)
-                current_df = prefer_ats_over_linkedin(current_df)
         else:
             current_df = append_linkedin_daily_jobs(
                 current_df=current_df,
@@ -518,14 +482,9 @@ def main() -> int:
 
             storage = PostgresJobStorage(retention_days=args.retention_days)
             storage.migrate()
-            ats_company_names = [
-                _company_name(row)
-                for row in published_df.to_dict(orient="records")
-                if not _is_linkedin_row(row) and _company_name(row)
-            ]
-            deleted_linkedin = storage.delete_linkedin_jobs_for_companies(ats_company_names)
-            print(f"PostgreSQL LinkedIn jobs replaced by ATS: {deleted_linkedin} deleted")
             stats = storage.upsert_jobs(published_df)
+            deleted_linkedin = storage.delete_linkedin_duplicates_of_ats_jobs()
+            print(f"PostgreSQL LinkedIn ATS duplicates deleted: {deleted_linkedin}")
             print(
                 "PostgreSQL publish: "
                 f"{stats.inserted} inserted, {stats.updated} updated, "
