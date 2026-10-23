@@ -19,6 +19,7 @@ def main() -> int:
     importer.add_argument("source", help="CSV path or Google Sheet URL/ID")
     importer.add_argument("--input-type", choices=["csv", "yaml", "sheets"], default="csv")
     importer.add_argument("--worksheet", default="OneSingle")
+    importer.add_argument("--skip-existing-boards", action="store_true")
     job_importer = subparsers.add_parser("import-jobs")
     job_importer.add_argument("source", help="Canonical published jobs CSV")
     job_importer.add_argument("--retention-days", type=int, default=30)
@@ -50,7 +51,11 @@ def main() -> int:
             dataframe = controller.load_data_from_yaml(args.source)
         else:
             dataframe = controller.load_data_from_csv(args.source)
-        print(f"Imported company sources: {storage.upsert_companies(dataframe)}")
+        stats = storage.upsert_companies(
+            dataframe,
+            skip_existing_boards=args.skip_existing_boards,
+        )
+        print(f"Imported company sources: {stats.inserted} inserted, {stats.skipped} skipped")
     else:
         dataframe = classify_jobs(
             DataController().normalize_jobs_dataframe(

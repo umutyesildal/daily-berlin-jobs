@@ -63,6 +63,10 @@ jobs:
           )
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
 
+      - name: Sync company catalog
+        if: steps.freshness.outputs.skip != 'true'
+        run: python scripts/db.py import-companies catalog/companies.yaml --input-type yaml --skip-existing-boards
+
       - name: Collect ATS jobs
         if: steps.freshness.outputs.skip != 'true'
         run: |
