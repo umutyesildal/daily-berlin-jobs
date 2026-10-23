@@ -52,6 +52,20 @@ class CompanyCatalogTests(unittest.TestCase):
         catalog = AtsCatalog.load(Path(__file__).resolve().parents[1] / "catalog" / "ats.yaml")
         self.assertTrue(catalog.identifiers().issubset(JobCrawlerController.SCRAPER_MAP))
 
+    def test_legacy_custom_labels_resolve_to_canonical_scrapers(self):
+        from daily_jobs.client import JobCrawlerController
+
+        controller = JobCrawlerController()
+        for legacy, canonical in (
+            ("custom-zalando", "zalando"),
+            ("custom-frequenz", "frequenz"),
+            ("custom-forto", "forto"),
+        ):
+            self.assertIs(
+                controller._resolve_scraper_class(legacy),
+                controller.SCRAPER_MAP[canonical],
+            )
+
     def test_url_normalization_removes_tracking_and_trailing_slash(self):
         self.assertEqual(
             normalize_url("HTTPS://Example.com/jobs/?utm_source=test#open"),

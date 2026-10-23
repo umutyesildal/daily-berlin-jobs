@@ -1345,3 +1345,101 @@ companies:
   description: 'Added manually on 2026-10-23: workday source with 1 Berlin engineering roles at verification.'
   active: true
   verified_at: '2026-10-23T15:03:39Z'
+- name: Sphera
+  website: https://sphera.com
+  career_page: https://sphera.wd1.myworkdayjobs.com/careers
+  ats: workday
+  description: 'Added manually on 2026-10-23: workday source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: Expedia Group
+  website: https://www.expediagroup.com
+  career_page: https://expedia.wd108.myworkdayjobs.com/search
+  ats: workday
+  description: 'Added manually on 2026-10-23: workday source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: Intel
+  website: https://www.intel.com
+  career_page: https://intel.wd1.myworkdayjobs.com/External
+  ats: workday
+  description: 'Added manually on 2026-10-23: workday source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: Snap Inc.
+  website: https://www.snap.com
+  career_page: https://wd1.myworkdaysite.com/recruiting/snapchat/snap
+  ats: workday
+  description: 'Added manually on 2026-10-23: workday source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: FNZ
+  website: https://www.fnz.com
+  career_page: https://fnz.wd3.myworkdayjobs.com/fnz_careers
+  ats: workday
+  description: 'Added manually on 2026-10-23: workday source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: Freshfields
+  website: https://www.freshfields.com
+  career_page: https://freshfields.wd3.myworkdayjobs.com/FBD_101
+  ats: workday
+  description: 'Added manually on 2026-10-23: workday source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: Mars
+  website: https://www.mars.com
+  career_page: https://mars.wd3.myworkdayjobs.com/External
+  ats: workday
+  description: 'Added manually on 2026-10-23: workday source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: Salesforce (Slack)
+  website: https://www.salesforce.com
+  career_page: https://salesforce.wd12.myworkdayjobs.com/Slack
+  ats: workday
+  description: 'Added manually on 2026-10-23: workday source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: AUTO1 Group
+  website: https://www.auto1-group.com
+  career_page: https://careers.smartrecruiters.com/AUTO1
+  ats: smartrecruiters
+  description: 'Added manually on 2026-10-23: smartrecruiters source (monitored for Berlin roles).'
+  active: true
+  verified_at: '2026-10-23T15:59:51Z'
+- name: Omio
+  website: https://www.omio.com
+  career_page: https://boards.greenhouse.io/omiocorp
+  ats: greenhouse
+  description: 'Added manually on 2026-10-23: greenhouse source (Berlin headquarters).'
+  active: true
+  verified_at: '2026-10-23T15:53:54Z'
+- name: Habyt
+  website: https://www.habyt.com
+  career_page: https://habyt.bamboohr.com/careers
+  ats: bamboohr
+  description: 'Added manually on 2026-10-23: bamboohr source (Berlin headquarters).'
+  active: true
+  verified_at: '2026-10-23T15:53:54Z'
+- name: Zalando
+  website: https://www.zalando.com
+  career_page: https://jobs.zalando.com/en/jobs?location=Berlin
+  ats: zalando
+  description: 'Added manually on 2026-10-23: zalando source (Berlin headquarters).'
+  active: true
+  verified_at: '2026-10-23T15:53:54Z'
+- name: Frequenz
+  website: https://www.frequenz.com
+  career_page: https://www.frequenz.com/careers
+  ats: frequenz
+  description: 'Added manually on 2026-10-23: frequenz source (Berlin headquarters).'
+  active: true
+  verified_at: '2026-10-23T15:53:54Z'
+- name: Forto
+  website: https://www.forto.com
+  career_page: https://careers.forto.com/forto-jobs/?job-location=berlin
+  ats: forto
+  description: 'Added manually on 2026-10-23: forto source (Berlin headquarters).'
+  active: true
+  verified_at: '2026-10-23T15:53:54Z'

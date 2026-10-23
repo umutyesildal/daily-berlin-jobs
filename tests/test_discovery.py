@@ -205,6 +205,35 @@ class BoardExtractionTests(unittest.TestCase):
             set(),
         )
 
+    def test_teamtailor_and_softgarden_patterns_and_career_pages(self):
+        found = extract_boards(
+            "https://aignostics.teamtailor.com/jobs "
+            "https://universalmusic.softgarden.io/en/vacancies"
+        )
+
+        self.assertEqual(found, {
+            ("teamtailor", "aignostics", ""),
+            ("softgarden", "universalmusic", ""),
+        })
+        self.assertEqual(
+            career_page("teamtailor", "aignostics", ""),
+            "https://aignostics.teamtailor.com/jobs",
+        )
+        self.assertEqual(
+            career_page("softgarden", "universalmusic", ""),
+            "https://universalmusic.softgarden.io/en/vacancies",
+        )
+
+    def test_teamtailor_and_softgarden_noise_slugs_are_skipped(self):
+        self.assertEqual(
+            extract_boards(
+                "https://app.teamtailor.com/jobs "
+                "https://www.softgarden.io/en/vacancies "
+                "https://career.teamtailor.com/jobs"
+            ),
+            set(),
+        )
+
     def test_bad_slugs_are_dropped(self):
         self.assertEqual(
             extract_boards(
