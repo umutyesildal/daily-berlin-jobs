@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { Job, JobsSnapshot } from "@/lib/jobs";
+import type { JobCategory } from "@/lib/seo";
 
 const PAGE_SIZE = 40;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -41,12 +42,21 @@ function options(jobs: Job[], field: "role" | "level" | "workMode"): string[] {
   return [...new Set(jobs.map((job) => job[field]).filter(Boolean))].sort(compareText);
 }
 
-export function JobsBoard({ snapshot, updatedLabel }: { snapshot: JobsSnapshot; updatedLabel: string }) {
+export function JobsBoard({
+  snapshot,
+  updatedLabel,
+  categories,
+}: {
+  snapshot: JobsSnapshot;
+  updatedLabel: string;
+  categories: JobCategory[];
+}) {
   const [source, setSource] = useState<"all" | "daily">("all");
   const [query, setQuery] = useState("");
   const [role, setRole] = useState("");
   const [level, setLevel] = useState("");
   const [workMode, setWorkMode] = useState("");
+  const [directOnly, setDirectOnly] = useState(false);
   const [sortDirection, setSortDirection] = useState<"desc" | "asc">("desc");
   const [page, setPage] = useState(1);
   const jobs = source === "all" ? snapshot.all : snapshot.daily;
@@ -66,27 +76,29 @@ export function JobsBoard({ snapshot, updatedLabel }: { snapshot: JobsSnapshot; 
         return (!needle || searchable.includes(needle))
           && (!role || job.role === role)
           && (!level || job.level === level)
-          && (!workMode || job.workMode === workMode);
+          && (!workMode || job.workMode === workMode)
+          && (!directOnly || job.source === "ats");
       })
       .sort((a, b) => {
         const dateDifference = dateValue(a.postedDate) - dateValue(b.postedDate);
         if (dateDifference) return sortDirection === "asc" ? dateDifference : -dateDifference;
         return compareText(a.company, b.company) || compareText(a.title, b.title);
       });
-  }, [jobs, query, role, level, workMode, sortDirection]);
+  }, [jobs, query, role, level, workMode, directOnly, sortDirection]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
   const visibleJobs = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-  const hasFilters = Boolean(query || role || level || workMode);
+  const hasFilters = Boolean(query || role || level || workMode || directOnly);
 
-  useEffect(() => setPage(1), [source, query, role, level, workMode, sortDirection]);
+  useEffect(() => setPage(1), [source, query, role, level, workMode, directOnly, sortDirection]);
 
   function clearFilters() {
     setQuery("");
     setRole("");
     setLevel("");
     setWorkMode("");
+    setDirectOnly(false);
   }
 
   return (
@@ -100,7 +112,7 @@ export function JobsBoard({ snapshot, updatedLabel }: { snapshot: JobsSnapshot; 
       </header>
 
       <section className="hero">
-        <span className="eyebrow">Updated daily from verified company sources</span>
+        <span className="eyebrow">Updated daily from company career sites and LinkedIn</span>
         <h1>Engineering jobs in Berlin,<br />without the noise.</h1>
         <p>Software, data, platform, security and embedded engineering roles in one place.</p>
         <p className="update-label">{updatedLabel}</p>
@@ -124,6 +136,14 @@ export function JobsBoard({ snapshot, updatedLabel }: { snapshot: JobsSnapshot; 
         <label className="filter-field"><span>Work style</span><select value={workMode} onChange={(event) => setWorkMode(event.target.value)}>
           <option value="">Any work style</option>{filterOptions.workModes.map((item) => <option key={item}>{item}</option>)}
         </select></label>
+        <label className="direct-only-filter">
+          <input
+            checked={directOnly}
+            onChange={(event) => setDirectOnly(event.target.checked)}
+            type="checkbox"
+          />
+          <span>Direct apply only</span>
+        </label>
         <button className="clear-filters" disabled={!hasFilters} onClick={clearFilters}>Clear</button>
         <span className="result-count">{filtered.length} jobs</span>
       </section>
@@ -143,6 +163,9 @@ export function JobsBoard({ snapshot, updatedLabel }: { snapshot: JobsSnapshot; 
                 <span className="role-tag">{job.role}</span>
                 {job.level !== "Not specified" && <span className="meta-tag">{job.level}</span>}
                 {job.workMode !== "Not specified" && <span className="meta-tag">{job.workMode}</span>}
+                <span className={`source-badge source-badge-${job.source}`}>
+                  {job.source === "linkedin" ? "LinkedIn" : "Direct"}
+                </span>
               </div>
             </div>
             <span>{job.company || "Unknown company"}</span>
@@ -161,6 +184,16 @@ export function JobsBoard({ snapshot, updatedLabel }: { snapshot: JobsSnapshot; 
         </nav>
       )}
 
+      <section className="browse-categories" aria-labelledby="browse-categories-title">
+        <span className="eyebrow">Explore the listings</span>
+        <h2 id="browse-categories-title">Browse by area</h2>
+        <nav aria-label="Job categories">
+          {categories.map((category) => (
+            <a href={`/berlin/${category.slug}`} key={category.slug}>{category.h1}</a>
+          ))}
+        </nav>
+      </section>
+
       <footer className="site-footer">
         <span>Daily Berlin Jobs · Engineering roles updated daily.</span>
         <nav className="agent-links" aria-label="AI agent resources">
@@ -172,6 +205,16 @@ export function JobsBoard({ snapshot, updatedLabel }: { snapshot: JobsSnapshot; 
           <a href="/api/v1/status">API</a>
           <span aria-hidden="true">·</span>
           <a href="/feed.xml">RSS</a>
+          <span aria-hidden="true">·</span>
+          <a href="/sitemap.xml">Sitemap</a>
+        </nav>
+        <nav className="footer-categories" aria-label="Job category pages">
+          <span>Job pages:</span>
+          {categories.map((category) => (
+            <a href={`/berlin/${category.slug}`} key={category.slug}>
+              {category.h1.replace(/ jobs in Berlin$/i, "")}
+            </a>
+          ))}
         </nav>
         <nav aria-label="Creator links">
           <a href="https://github.com/umutyesildal/daily-berlin-jobs/issues/new?template=company_suggestion.yml" target="_blank" rel="noreferrer">Suggest a company</a>

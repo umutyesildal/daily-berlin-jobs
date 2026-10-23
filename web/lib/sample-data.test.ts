@@ -7,6 +7,7 @@ test("sample mode always contains current rolling dates", () => {
   const today = new Date().toISOString().slice(0, 10);
   assert.equal(snapshot.all[0]?.postedDate, today);
   assert.equal(snapshot.daily.length, 3);
+  assert.equal(snapshot.all.find((job) => job.company === "Responsible AI Berlin")?.source, "linkedin");
 });
 
 test("sample API jobs include metadata and redact LinkedIn descriptions", () => {

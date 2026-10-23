@@ -1,4 +1,5 @@
 export type Job = {
+  source: "ats" | "linkedin";
   company: string;
   title: string;
   location: string;
