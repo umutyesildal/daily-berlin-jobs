@@ -3,7 +3,7 @@ import {
   isMarkdownDetailRequest,
   jsonResponse,
   textResponse,
-  toListJob,
+  toDetailJob,
 } from "@/lib/agent-api";
 import { getAgentJob, getAgentUpdatedAt } from "@/lib/postgres";
 
@@ -36,13 +36,5 @@ export async function GET(request: Request, context: RouteContext): Promise<Resp
     );
   }
 
-  const description = job.sourceType === "linkedin" ? null : job.description;
-  return jsonResponse(request, updatedAt, {
-    updated_at: updatedAt,
-    ...toListJob(job, url.origin),
-    employment_type: job.employmentType,
-    department: job.department,
-    description,
-    description_available: Boolean(description?.trim()),
-  });
+  return jsonResponse(request, updatedAt, toDetailJob(job, url.origin, updatedAt));
 }

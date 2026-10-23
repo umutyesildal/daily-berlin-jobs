@@ -57,6 +57,7 @@ export type AgentApiStatus = {
     levels: string[];
     work_modes: string[];
   };
+  sources: SourceHealthSummary | null;
   docs: {
     llms_txt: string;
     agents_md: string;
@@ -64,6 +65,16 @@ export type AgentApiStatus = {
     today_md: string;
     rss: string;
   };
+};
+
+export type SourceHealthSummary = {
+  active: number;
+  healthy: number;
+  empty: number;
+  failing: number;
+  unchecked: number;
+  disabled_last_7_days: number;
+  last_checked_at: string | null;
 };
 
 export class AgentApiInputError extends Error {}
@@ -290,6 +301,7 @@ export function createAgentStatus(input: {
   roles: string[];
   levels: string[];
   workModes: string[];
+  sources: SourceHealthSummary | null;
   now: Date;
   baseUrl: string;
 }): AgentApiStatus {
@@ -311,6 +323,7 @@ export function createAgentStatus(input: {
       levels: [...new Set(input.levels)].sort((left, right) => left.localeCompare(right)),
       work_modes: [...new Set(input.workModes)].sort((left, right) => left.localeCompare(right)),
     },
+    sources: input.sources,
     docs: {
       llms_txt: `${input.baseUrl}/llms.txt`,
       agents_md: `${input.baseUrl}/agents.md`,
@@ -336,6 +349,18 @@ export function toListJob(job: AgentJob, baseUrl: string) {
     posted_date: job.postedDate,
     first_seen_at: job.firstSeenAt,
     source: job.sourceType,
+  };
+}
+
+export function toDetailJob(job: AgentJob, baseUrl: string, updatedAt: string) {
+  const description = job.sourceType === "linkedin" ? null : job.description;
+  return {
+    updated_at: updatedAt,
+    ...toListJob(job, baseUrl),
+    employment_type: job.employmentType,
+    department: job.department,
+    description,
+    description_available: Boolean(description?.trim()),
   };
 }
 

@@ -21,9 +21,12 @@ def main() -> int:
     storage = PostgresJobStorage(retention_days=30)
     storage.migrate()
     with storage.connect() as connection, connection.cursor() as cursor:
-        cursor.execute("SELECT to_regclass(%s), to_regclass(%s)", (
+        cursor.execute("SELECT to_regclass(%s), to_regclass(%s), to_regclass(%s), to_regclass(%s), to_regclass(%s)", (
             "public.discovery_search_cache",
             "public.discovered_boards",
+            "public.source_health",
+            "public.source_health_summary",
+            "public.source_health_admin",
         ))
         assert all(cursor.fetchone())
         cursor.execute(
@@ -320,10 +323,80 @@ def main() -> int:
         cursor.execute("SELECT count(*) FROM job_fingerprints WHERE identity_key = %s", (linkedin_identity,))
         assert cursor.fetchone()[0] == 1
 
+    health_name = f"Source Health Smoke {uuid4().hex[:12]}"
+    health_page = f"https://boards.greenhouse.io/source-health-{uuid4().hex[:12]}"
+    storage.upsert_companies(pd.DataFrame([{
+        "Name": health_name,
+        "Website": "https://source-health-smoke.example",
+        "Career Page": health_page,
+        "Description": "Disposable source health smoke-test source",
+        "Label": "greenhouse",
+        "Active": True,
+    }]))
+    with storage.connect() as connection, connection.cursor() as cursor:
+        cursor.execute("SELECT id FROM career_sources WHERE career_page = %s", (health_page,))
+        source_id = cursor.fetchone()[0]
+
+    error_result = {
+        "source_id": source_id,
+        "status": "error",
+        "job_count": 0,
+        "berlin_engineering_count": 0,
+        "error": "HTTP 404",
+        "status_code": 404,
+    }
+    for _ in range(7):
+        assert storage.record_source_health([error_result]) == 1
+
+    with storage.connect() as connection, connection.cursor() as cursor:
+        cursor.execute("SELECT active FROM career_sources WHERE id = %s", (source_id,))
+        assert cursor.fetchone()[0] is False
+        cursor.execute(
+            "SELECT consecutive_errors, last_status_code, disabled_at, disabled_reason "
+            "FROM source_health WHERE career_source_id = %s",
+            (source_id,),
+        )
+        errors, status_code, disabled_at, disabled_reason = cursor.fetchone()
+        assert errors == 7
+        assert status_code == 404
+        assert disabled_at is not None
+        assert disabled_reason == "auto: 7 consecutive errors (HTTP 404)"
+        cursor.execute(
+            "SELECT active_sources, healthy, empty, failing, unchecked, disabled_last_7_days, last_checked_at "
+            "FROM source_health_summary"
+        )
+        summary = cursor.fetchone()
+        cursor.execute(
+            """
+            SELECT
+                count(*) FILTER (WHERE s.active)::integer,
+                count(*) FILTER (WHERE s.active AND h.last_status = 'ok')::integer,
+                count(*) FILTER (WHERE s.active AND h.last_status = 'empty')::integer,
+                count(*) FILTER (WHERE s.active AND h.last_status = 'error')::integer,
+                count(*) FILTER (WHERE s.active AND h.career_source_id IS NULL)::integer,
+                count(*) FILTER (WHERE h.disabled_at > now() - interval '7 days')::integer,
+                max(h.last_run_at)
+            FROM career_sources s
+            LEFT JOIN source_health h ON h.career_source_id = s.id
+            """
+        )
+        assert summary == cursor.fetchone()
+        assert summary[5] >= 1
+        assert summary[6] is not None
+        cursor.execute("SET ROLE daily_jobs_web")
+        cursor.execute("SELECT disabled_last_7_days FROM source_health_summary")
+        assert cursor.fetchone()[0] >= 1
+        cursor.execute(
+            "SELECT company_name, disabled_reason FROM source_health_admin WHERE career_source_id = %s",
+            (source_id,),
+        )
+        assert cursor.fetchone() == (health_name, disabled_reason)
+        cursor.execute("RESET ROLE")
+
     print(
         "PostgreSQL smoke: migrations, moderated company sync, historical-job preservation, "
         "semantic dedup, URL mutation, expiry skip, 30-day deletion, agent API views, "
-        "company board skipping, and retained-job LinkedIn duplicate deletion passed"
+        "company board skipping, retained-job LinkedIn duplicate deletion, and source health passed"
     )
     return 0
 

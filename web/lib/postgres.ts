@@ -7,6 +7,7 @@ import {
   parseJobsQuery,
   type AgentJob,
   type JobsQuery,
+  type SourceHealthSummary,
 } from "./agent-api";
 import type { Job, JobsSnapshot } from "./jobs";
 import { getSampleAgentJobs, getSampleJobsSnapshot } from "./sample-data";
@@ -131,6 +132,48 @@ function toAgentJob(row: AgentJobRow): AgentJob {
   };
 }
 
+export type SourceHealthAdminItem = {
+  company_name: string;
+  career_page: string;
+  ats_label: string | null;
+  active: boolean;
+  last_status: string | null;
+  consecutive_errors: number;
+  last_status_code: number | null;
+  last_error: string | null;
+  disabled_at: string | null;
+  disabled_reason: string | null;
+};
+
+async function loadSourceHealthSummary(client: Pool): Promise<SourceHealthSummary | null> {
+  try {
+    const result = await client.query<{
+      active_sources: number;
+      healthy: number;
+      empty: number;
+      failing: number;
+      unchecked: number;
+      disabled_last_7_days: number;
+      last_checked_at: string | Date | null;
+    }>("SELECT * FROM source_health_summary");
+    const row = result.rows[0];
+    if (!row) return null;
+    return {
+      active: row.active_sources,
+      healthy: row.healthy,
+      empty: row.empty,
+      failing: row.failing,
+      unchecked: row.unchecked,
+      disabled_last_7_days: row.disabled_last_7_days,
+      last_checked_at: row.last_checked_at
+        ? new Date(row.last_checked_at).toISOString()
+        : null,
+    };
+  } catch {
+    return null;
+  }
+}
+
 function sampleJobsQuery(query: JobsQuery, now: Date) {
   const latestStartedAt = new Date(now.getTime() - 10 * 60 * 1000).toISOString();
   const filtered = filterAndSortJobs(getSampleAgentJobs(now), query, latestStartedAt);
@@ -189,6 +232,15 @@ export async function getAgentStatus(baseUrl: string, now = new Date()) {
       roles: jobs.map((job) => job.role),
       levels: jobs.map((job) => job.level),
       workModes: jobs.map((job) => job.workMode),
+      sources: {
+        active: 150,
+        healthy: 136,
+        empty: 8,
+        failing: 4,
+        unchecked: 2,
+        disabled_last_7_days: 1,
+        last_checked_at: new Date(now.getTime() - 60 * 60 * 1000).toISOString(),
+      },
       now,
       baseUrl,
     });
@@ -203,6 +255,7 @@ export async function getAgentStatus(baseUrl: string, now = new Date()) {
     rolesResult,
     levelsResult,
     workModesResult,
+    sourceHealth,
   ] = await Promise.all([
     client.query<{
       finished_at: string | Date;
@@ -225,6 +278,7 @@ export async function getAgentStatus(baseUrl: string, now = new Date()) {
     client.query<{ work_mode: string }>(
       "SELECT DISTINCT work_mode FROM api_jobs WHERE work_mode IS NOT NULL AND btrim(work_mode) <> '' ORDER BY work_mode",
     ),
+    loadSourceHealthSummary(client),
   ]);
   const run = runResult.rows[0];
   const updatedAt = run?.finished_at ?? statusResult.rows[0]?.updated_at ?? now;
@@ -238,9 +292,66 @@ export async function getAgentStatus(baseUrl: string, now = new Date()) {
     roles: rolesResult.rows.map((row) => row.role),
     levels: levelsResult.rows.map((row) => row.level),
     workModes: workModesResult.rows.map((row) => row.work_mode),
+    sources: sourceHealth,
     now,
     baseUrl,
   });
+}
+
+export async function getAdminSourceHealth(): Promise<SourceHealthAdminItem[]> {
+  if (process.env.USE_SAMPLE_DATA?.trim().toLowerCase() === "true") {
+    return [
+      {
+        company_name: "Sample Platform",
+        career_page: "https://careers.example.com/platform",
+        ats_label: "Greenhouse",
+        active: true,
+        last_status: "error",
+        consecutive_errors: 3,
+        last_status_code: 500,
+        last_error: "Temporary server error",
+        disabled_at: null,
+        disabled_reason: null,
+      },
+      {
+        company_name: "Sample Systems",
+        career_page: "https://careers.example.com/systems",
+        ats_label: "Ashby",
+        active: false,
+        last_status: "error",
+        consecutive_errors: 7,
+        last_status_code: 404,
+        last_error: "HTTP 404",
+        disabled_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+        disabled_reason: "auto: 7 consecutive errors (HTTP 404)",
+      },
+    ];
+  }
+  const result = await databasePool().query<{
+    company_name: string;
+    career_page: string;
+    ats_label: string | null;
+    active: boolean;
+    last_status: string | null;
+    consecutive_errors: number | null;
+    last_status_code: number | null;
+    last_error: string | null;
+    disabled_at: string | Date | null;
+    disabled_reason: string | null;
+  }>(
+    `SELECT company_name, career_page, ats_label, active, last_status,
+            consecutive_errors, last_status_code, last_error, disabled_at, disabled_reason
+     FROM source_health_admin
+     WHERE (active AND last_status = 'error')
+        OR disabled_at > now() - interval '7 days'
+     ORDER BY consecutive_errors DESC NULLS LAST, company_name
+     LIMIT 100`,
+  );
+  return result.rows.map((row) => ({
+    ...row,
+    consecutive_errors: row.consecutive_errors ?? 0,
+    disabled_at: row.disabled_at ? new Date(row.disabled_at).toISOString() : null,
+  }));
 }
 
 export async function getAgentJobs(query: JobsQuery, now = new Date()) {
