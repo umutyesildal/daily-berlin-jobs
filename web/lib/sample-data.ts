@@ -9,6 +9,7 @@ function sampleDate(daysAgo: number): string {
 
 const SAMPLE_JOBS: Job[] = [
   {
+    source: "ats",
     company: "Open Source Labs",
     title: "Backend Engineer",
     location: "Berlin, Germany",
@@ -23,6 +24,7 @@ const SAMPLE_JOBS: Job[] = [
     workMode: "Hybrid",
   },
   {
+    source: "ats",
     company: "Community Cloud",
     title: "Platform Engineer",
     location: "Berlin, Germany",
@@ -37,6 +39,7 @@ const SAMPLE_JOBS: Job[] = [
     workMode: "Remote",
   },
   {
+    source: "ats",
     company: "Civic Robotics",
     title: "Embedded Software Engineer",
     location: "Berlin, Germany",
@@ -51,6 +54,7 @@ const SAMPLE_JOBS: Job[] = [
     workMode: "On-site",
   },
   {
+    source: "linkedin",
     company: "Responsible AI Berlin",
     title: "Machine Learning Engineer",
     location: "Berlin, Germany",
@@ -65,6 +69,7 @@ const SAMPLE_JOBS: Job[] = [
     workMode: "Hybrid",
   },
   {
+    source: "ats",
     company: "Future Labs",
     title: "Fullstack Engineer",
     location: "Berlin, Germany",
@@ -79,6 +84,7 @@ const SAMPLE_JOBS: Job[] = [
     workMode: "Hybrid",
   },
   {
+    source: "ats",
     company: "Civic Systems",
     title: "Backend Developer",
     location: "Berlin, Germany",

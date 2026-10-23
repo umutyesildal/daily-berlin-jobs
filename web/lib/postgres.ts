@@ -1,8 +1,10 @@
 import { Pool } from "pg";
 import {
   createAgentStatus,
+  decodeCursor,
   filterAndSortJobs,
   paginateJobs,
+  parseJobsQuery,
   type AgentJob,
   type JobsQuery,
 } from "./agent-api";
@@ -22,6 +24,7 @@ type JobRow = {
   level: string | null;
   role: string;
   work_mode: string | null;
+  source_type: string;
   updated_at: string | Date;
 };
 
@@ -75,12 +78,21 @@ function toJob(row: JobRow): Job {
     level: row.level ?? "Not specified",
     role: row.role,
     workMode: row.work_mode ?? "Not specified",
+    source: row.source_type === "linkedin" ? "linkedin" : "ats",
   };
 }
 
 const JOB_COLUMNS = `
   company_name, title, location, canonical_url, posted_at, remote, department,
-  keywords, tech_stack, level, role, work_mode, updated_at
+  keywords, tech_stack, level, role, work_mode,
+  CASE
+    WHEN lower(COALESCE(source, '')) = 'linkedin'
+      OR lower(COALESCE(ats_label, '')) = 'linkedin'
+      OR canonical_url ILIKE '%linkedin.com/%'
+    THEN 'linkedin'
+    ELSE 'ats'
+  END AS source_type,
+  updated_at
 `;
 
 const LIST_AGENT_JOB_COLUMNS = `
@@ -277,6 +289,53 @@ export async function getAgentJobs(query: JobsQuery, now = new Date()) {
     updatedAt,
     ...paginateJobs(jobs, query.limit),
   };
+}
+
+export async function getAllAgentJobs(query?: JobsQuery, now = new Date()): Promise<AgentJob[]> {
+  const baseQuery: JobsQuery = {
+    ...(query ?? parseJobsQuery(new URLSearchParams())),
+    limit: 500,
+    cursor: null,
+  };
+  if (process.env.USE_SAMPLE_DATA?.trim().toLowerCase() === "true") {
+    const latestStartedAt = new Date(now.getTime() - 10 * 60 * 1000).toISOString();
+    return filterAndSortJobs(getSampleAgentJobs(now), baseQuery, latestStartedAt);
+  }
+
+  const jobs: AgentJob[] = [];
+  let cursor: JobsQuery["cursor"] = baseQuery.cursor;
+  while (true) {
+    const page = await getAgentJobs({ ...baseQuery, cursor }, now);
+    jobs.push(...page.jobs);
+    if (!page.nextCursor) return jobs;
+    cursor = decodeCursor(page.nextCursor);
+  }
+}
+
+export async function getAgentCompanyNames(): Promise<string[]> {
+  if (process.env.USE_SAMPLE_DATA?.trim().toLowerCase() === "true") {
+    return [...new Set(getSampleAgentJobs().map((job) => job.company))]
+      .sort((left, right) => left.localeCompare(right));
+  }
+  const result = await databasePool().query<{ company_name: string }>(
+    "SELECT DISTINCT company_name FROM api_jobs WHERE btrim(company_name) <> '' ORDER BY company_name",
+  );
+  return result.rows.map((row) => row.company_name);
+}
+
+export async function getAgentJobsByCompany(company: string): Promise<AgentJob[]> {
+  if (process.env.USE_SAMPLE_DATA?.trim().toLowerCase() === "true") {
+    return getSampleAgentJobs()
+      .filter((job) => job.company.toLocaleLowerCase() === company.toLocaleLowerCase())
+      .sort((left, right) => Date.parse(right.firstSeenAt) - Date.parse(left.firstSeenAt));
+  }
+  const result = await databasePool().query<AgentJobRow>(
+    `SELECT ${LIST_AGENT_JOB_COLUMNS} FROM api_jobs
+     WHERE lower(company_name) = lower($1)
+     ORDER BY first_seen_at DESC, id DESC`,
+    [company],
+  );
+  return result.rows.map(toAgentJob);
 }
 
 export async function getAgentJob(id: string): Promise<AgentJob | null> {
