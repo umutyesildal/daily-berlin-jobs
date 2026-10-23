@@ -4,6 +4,7 @@
 import os
 from datetime import datetime
 from urllib.parse import urlsplit
+from uuid import uuid4
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -150,29 +151,97 @@ def main() -> int:
     }]))
     assert (alias_stats.inserted, alias_stats.updated) == (0, 1), alias_stats
 
+    api_stats = storage.upsert_jobs(pd.DataFrame([
+        {
+            **common,
+            "Company Name": "LinkedIn API Test",
+            "Job Title": "LinkedIn API Test Role",
+            "Job Link": "https://www.linkedin.com/jobs/view/123456",
+            "Job Description": "This description must not be public.",
+            "ATS": "LinkedIn",
+        },
+        {
+            **common,
+            "Company Name": "ATS API Test",
+            "Job Title": "ATS API Test Role",
+            "Job Link": "https://example.com/jobs/ats-api-test",
+            "Job Description": "This ATS description is public.",
+            "ATS": "greenhouse",
+        },
+    ]))
+    assert api_stats.inserted == 2, api_stats
+    with storage.connect() as connection, connection.cursor() as cursor:
+        cursor.execute("SET ROLE daily_jobs_web")
+        cursor.execute(
+            "SELECT source_type, description FROM api_jobs WHERE title = %s",
+            ("LinkedIn API Test Role",),
+        )
+        linkedin_source, linkedin_description = cursor.fetchone()
+        assert linkedin_source == "linkedin"
+        assert linkedin_description is None
+        cursor.execute(
+            "SELECT source_type, description FROM api_jobs WHERE title = %s",
+            ("ATS API Test Role",),
+        )
+        ats_source, ats_description = cursor.fetchone()
+        assert ats_source == "ats"
+        assert ats_description == "This ATS description is public."
+        cursor.execute("RESET ROLE")
+
     with storage.connect() as connection, connection.cursor() as cursor:
         cursor.execute("SELECT count(*) FROM jobs")
-        assert cursor.fetchone()[0] == 1
-        cursor.execute("SELECT title FROM jobs")
+        assert cursor.fetchone()[0] == 3
+        cursor.execute("SELECT title FROM jobs WHERE title = %s", ("Software Engineer II",))
         assert cursor.fetchone()[0] == "Software Engineer II"
         cursor.execute("SELECT count(*) FROM job_fingerprints")
-        assert cursor.fetchone()[0] == 2
+        assert cursor.fetchone()[0] == 4
         cursor.execute("SELECT count(*) FROM job_url_aliases")
-        assert cursor.fetchone()[0] == 3
+        assert cursor.fetchone()[0] == 5
         cursor.execute(
             "UPDATE jobs SET posted_at = NULL, first_seen_at = now() - interval '31 days'"
         )
 
     retention_stats = storage.upsert_jobs(pd.DataFrame())
-    assert retention_stats.deleted == 1, retention_stats
+    assert retention_stats.deleted == 3, retention_stats
     with storage.connect() as connection, connection.cursor() as cursor:
         cursor.execute("SELECT count(*) FROM jobs")
         assert cursor.fetchone()[0] == 0
         cursor.execute("SELECT count(*) FROM job_fingerprints")
-        assert cursor.fetchone()[0] == 2
+        assert cursor.fetchone()[0] == 4
+        cursor.execute(
+            """
+            INSERT INTO crawl_runs(id, started_at, finished_at, status, error)
+            VALUES (%s, now() + interval '1 second', now() + interval '2 seconds', 'failed', %s)
+            """,
+            (uuid4(), "smoke-test error must not be exposed"),
+        )
+        cursor.execute(
+            "SELECT finished_at, discovered_count, inserted_count, updated_count, deleted_count FROM crawl_status"
+        )
+        public_run = cursor.fetchone()
+        cursor.execute(
+            """
+            SELECT finished_at, discovered_count, inserted_count, updated_count, deleted_count
+            FROM crawl_runs WHERE status = 'succeeded' ORDER BY finished_at DESC LIMIT 1
+            """
+        )
+        latest_success = cursor.fetchone()
+        assert public_run == latest_success
+        cursor.execute(
+            """
+            SELECT column_name FROM information_schema.columns
+            WHERE table_schema = 'public' AND table_name = 'crawl_status'
+            """
+        )
+        crawl_status_columns = {row[0] for row in cursor.fetchall()}
+        assert "error" not in crawl_status_columns
         cursor.execute("SET ROLE daily_jobs_web")
         cursor.execute("SELECT job_count FROM data_status")
         assert cursor.fetchone()[0] == 0
+        cursor.execute(
+            "SELECT finished_at, discovered_count, inserted_count, updated_count, deleted_count FROM crawl_status"
+        )
+        assert cursor.fetchone() == latest_success
         cursor.execute("RESET ROLE")
 
     replacement_rows = pd.DataFrame([
@@ -226,8 +295,8 @@ def main() -> int:
 
     print(
         "PostgreSQL smoke: migrations, moderated company sync, historical-job preservation, "
-        "semantic dedup, URL mutation, expiry skip, 30-day deletion, company board skipping, "
-        "and ATS-over-LinkedIn replacement passed"
+        "semantic dedup, URL mutation, expiry skip, 30-day deletion, agent API views, "
+        "company board skipping, and ATS-over-LinkedIn replacement passed"
     )
     return 0
 

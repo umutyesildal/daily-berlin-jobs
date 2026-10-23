@@ -1,4 +1,4 @@
-import { createHmac, scryptSync, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, scryptSync, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 
 const COOKIE_NAME = "daily_berlin_admin";
@@ -21,6 +21,16 @@ export function verifyAdminPassword(password: string): boolean {
   const actual = scryptSync(password, salt, expectedHex.length / 2);
   const expected = Buffer.from(expectedHex, "hex");
   return actual.length === expected.length && timingSafeEqual(actual, expected);
+}
+
+export function hasValidCronBearer(request: Request): boolean {
+  const expected = process.env.CRON_SECRET?.trim();
+  const match = /^Bearer\s+(.+)$/i.exec(request.headers.get("authorization") ?? "");
+  const provided = match?.[1]?.trim() ?? "";
+  const expectedDigest = createHash("sha256").update(expected ?? "").digest();
+  const providedDigest = createHash("sha256").update(provided).digest();
+  const matches = timingSafeEqual(providedDigest, expectedDigest);
+  return Boolean(expected && provided && match && matches);
 }
 
 export async function createAdminSession(): Promise<void> {

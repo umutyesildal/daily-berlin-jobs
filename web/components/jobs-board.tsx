@@ -41,7 +41,7 @@ function options(jobs: Job[], field: "role" | "level" | "workMode"): string[] {
   return [...new Set(jobs.map((job) => job[field]).filter(Boolean))].sort(compareText);
 }
 
-export function JobsBoard({ snapshot }: { snapshot: JobsSnapshot }) {
+export function JobsBoard({ snapshot, updatedLabel }: { snapshot: JobsSnapshot; updatedLabel: string }) {
   const [source, setSource] = useState<"all" | "daily">("all");
   const [query, setQuery] = useState("");
   const [role, setRole] = useState("");
@@ -103,6 +103,7 @@ export function JobsBoard({ snapshot }: { snapshot: JobsSnapshot }) {
         <span className="eyebrow">Updated daily from verified company sources</span>
         <h1>Engineering jobs in Berlin,<br />without the noise.</h1>
         <p>Software, data, platform, security and embedded engineering roles in one place.</p>
+        <p className="update-label">{updatedLabel}</p>
       </section>
 
       <section className="controls">
@@ -162,6 +163,16 @@ export function JobsBoard({ snapshot }: { snapshot: JobsSnapshot }) {
 
       <footer className="site-footer">
         <span>Daily Berlin Jobs · Engineering roles updated daily.</span>
+        <nav className="agent-links" aria-label="AI agent resources">
+          <span>For AI agents:</span>
+          <a href="/llms.txt">llms.txt</a>
+          <span aria-hidden="true">·</span>
+          <a href="/agents.md">agents.md</a>
+          <span aria-hidden="true">·</span>
+          <a href="/api/v1/status">API</a>
+          <span aria-hidden="true">·</span>
+          <a href="/feed.xml">RSS</a>
+        </nav>
         <nav aria-label="Creator links">
           <a href="https://github.com/umutyesildal/daily-berlin-jobs/issues/new?template=company_suggestion.yml" target="_blank" rel="noreferrer">Suggest a company</a>
           <a className="admin-footer-link" href="/admin" aria-label="Admin">Admin</a>
