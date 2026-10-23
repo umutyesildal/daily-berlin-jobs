@@ -3,7 +3,7 @@ name: Daily Berlin Jobs Update
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 5 * * *"
+    - cron: "17 8 * * *"
 
 concurrency:
   group: daily-berlin-jobs-update
@@ -46,12 +46,31 @@ jobs:
       - name: Apply database migrations
         run: python scripts/db.py migrate
 
+      - name: Check for a recent successful crawl
+        id: freshness
+        if: github.event_name == 'schedule'
+        run: |
+          skip=$(python - <<'PY'
+          from daily_jobs.postgres_storage import PostgresJobStorage
+
+          with PostgresJobStorage().connect() as connection, connection.cursor() as cursor:
+              cursor.execute(
+                  "SELECT EXISTS (SELECT 1 FROM crawl_runs "
+                  "WHERE status = 'succeeded' AND finished_at > now() - interval '12 hours')"
+              )
+              print(str(cursor.fetchone()[0]).lower())
+          PY
+          )
+          echo "skip=$skip" >> "$GITHUB_OUTPUT"
+
       - name: Collect ATS jobs
+        if: steps.freshness.outputs.skip != 'true'
         run: |
           python -m daily_jobs.main \
             -t postgres
 
       - name: Publish canonical datasets
+        if: steps.freshness.outputs.skip != 'true'
         run: |
           python -m daily_jobs.post_process_jobs \
             --storage-backend postgres \
@@ -61,6 +80,7 @@ jobs:
             --no-update-baseline
 
       - name: Verify PostgreSQL snapshot
+        if: steps.freshness.outputs.skip != 'true'
         run: |
           python - <<'PY'
           from daily_jobs.postgres_storage import PostgresJobStorage

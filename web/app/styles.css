@@ -15,6 +15,7 @@ button { cursor:pointer; }
 .hero { padding:38px 0 30px; max-width:720px; }
 .hero h1 { margin:7px 0 10px; font-size:clamp(32px,4vw,52px); line-height:1.02; letter-spacing:-.05em; }
 .hero p,.admin-card p { color:var(--muted); line-height:1.55; }
+.hero .update-label { margin:12px 0 0; font-size:13px; font-weight:600; }
 .controls { display:grid; grid-template-columns:1fr minmax(280px,420px); gap:18px; align-items:center; margin-bottom:18px; }
 .tabs { display:flex; gap:8px; }
 .tabs button { border:1px solid var(--line); border-radius:999px; padding:10px 14px; background:#fff; }
@@ -44,9 +45,10 @@ button { cursor:pointer; }
 .pagination { display:flex; align-items:center; justify-content:center; gap:16px; padding:24px 0 0; color:var(--muted); font-size:13px; }
 .pagination button { border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); padding:8px 12px; }
 .pagination button:disabled { opacity:.4; cursor:default; }
-.site-footer { display:flex; align-items:center; justify-content:space-between; margin-top:30px; padding:22px 2px 4px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }
-.site-footer nav { display:flex; align-items:center; gap:7px; }
+.site-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:30px; padding:22px 2px 4px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }
+.site-footer nav { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
 .site-footer a { border:1px solid var(--line); border-radius:8px; background:rgba(255,255,255,.55); padding:6px 9px; text-decoration:none; }
+.site-footer .agent-links a { display:inline-flex; min-height:40px; align-items:center; }
 .site-footer a:hover { background:#fff; color:var(--ink); }
 .site-footer .admin-footer-link { border:0; background:transparent; opacity:.4; }
 .empty { padding:36px 14px; color:var(--muted); }

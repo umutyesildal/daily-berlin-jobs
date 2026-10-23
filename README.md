@@ -120,6 +120,7 @@ GITHUB_OWNER=umutyesildal
 GITHUB_REPO=daily-berlin-jobs
 GITHUB_WORKFLOW_ID=daily-update.yml
 GITHUB_ACTIONS_TOKEN=github_pat_replace_me
+CRON_SECRET=replace_with_a_long_random_secret
 ADMIN_PASSWORD_HASH=replace_with_a_password_hash
 SESSION_SECRET=replace_with_a_long_random_secret
 ```
@@ -131,6 +132,15 @@ use separate server-side connections.
 Full instructions, one-time Sheet migration, quota thresholds, backup, restore,
 cutover, and rollback are in [docs/DATABASE.md](docs/DATABASE.md). Component and
 trust boundaries are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## For AI agents & API
+
+The public, read-only API requires no key. Start at `/api/v1/status` for the
+last successful update, expected refresh window, and supported filters. Query
+`/api/v1/jobs` with `since`, `latest=1`, `role`, `level`, `work_mode`, `q`,
+`source`, `limit`, and `cursor`; job details are at `/api/v1/jobs/{id}`.
+Markdown is available at `/jobs.md`, `/today.md`, and `/jobs/{id}.md`; `/feed.xml`
+is the RSS feed. Agent guidance is published at `/llms.txt` and `/agents.md`.
 
 ## Admin panel
 
