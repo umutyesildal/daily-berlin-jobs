@@ -1,4 +1,5 @@
 import type { Job, JobsSnapshot } from "./jobs";
+import type { AgentJob } from "./agent-api";
 
 function sampleDate(daysAgo: number): string {
   const value = new Date();
@@ -63,6 +64,34 @@ const SAMPLE_JOBS: Job[] = [
     role: "Data / AI / ML",
     workMode: "Hybrid",
   },
+  {
+    company: "Future Labs",
+    title: "Fullstack Engineer",
+    location: "Berlin, Germany",
+    link: "https://example.com/jobs/fullstack-engineer",
+    postedDate: sampleDate(0),
+    remote: "Hybrid",
+    department: "Product Engineering",
+    keywords: ["fullstack", "typescript", "react"],
+    techStack: ["TypeScript", "React", "PostgreSQL"],
+    level: "Mid-level",
+    role: "Fullstack",
+    workMode: "Hybrid",
+  },
+  {
+    company: "Civic Systems",
+    title: "Backend Developer",
+    location: "Berlin, Germany",
+    link: "https://example.com/jobs/backend-developer",
+    postedDate: sampleDate(0),
+    remote: "Remote",
+    department: "Engineering",
+    keywords: ["backend", "python", "postgresql"],
+    techStack: ["Python", "PostgreSQL"],
+    level: "Senior",
+    role: "Backend",
+    workMode: "Remote",
+  },
 ];
 
 export function getSampleJobsSnapshot(): JobsSnapshot {
@@ -71,4 +100,32 @@ export function getSampleJobsSnapshot(): JobsSnapshot {
     daily: SAMPLE_JOBS.slice(0, 3).map((job) => ({ ...job })),
     updatedAt: new Date().toISOString(),
   };
+}
+
+export function getSampleAgentJobs(now = new Date()): AgentJob[] {
+  return SAMPLE_JOBS.map((job, index) => {
+    const isLinkedIn = index === 3;
+    const recentMinutes = new Map([[0, 5], [4, 4], [5, 1]]).get(index);
+    const firstSeenAt = new Date(
+      now.getTime() - (recentMinutes === undefined ? (index + 1) * 24 * 60 * 60 * 1000 : recentMinutes * 60 * 1000),
+    ).toISOString();
+    return {
+      id: index + 1,
+      company: job.company,
+      title: job.title,
+      location: job.location,
+      url: job.link,
+      role: job.role,
+      level: job.level,
+      workMode: job.workMode,
+      employmentType: "Full-time",
+      department: job.department,
+      techStack: [...job.techStack],
+      postedDate: job.postedDate,
+      firstSeenAt,
+      lastSeenAt: now.toISOString(),
+      sourceType: isLinkedIn ? "linkedin" : "ats",
+      description: isLinkedIn ? null : `${job.title} at ${job.company}. ${job.department} team in Berlin.`,
+    };
+  });
 }
