@@ -2,7 +2,7 @@
 """Destructive integration smoke test for a disposable local PostgreSQL DB."""
 
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from urllib.parse import urlsplit
 from uuid import uuid4
 from zoneinfo import ZoneInfo
@@ -244,59 +244,86 @@ def main() -> int:
         assert cursor.fetchone() == latest_success
         cursor.execute("RESET ROLE")
 
+    expired_posted_date = (
+        datetime.now(ZoneInfo("Europe/Berlin")).date() - timedelta(days=40)
+    ).isoformat()
     replacement_rows = pd.DataFrame([
         {
             **common,
             "Company Name": "München Labs GmbH",
-            "Job Title": "LinkedIn version of role",
+            "Job Title": "Backend Engineer (m/w/d)",
+            "Job Link": "https://example.com/jobs/backend-ats",
+            "ATS": "greenhouse",
+        },
+        {
+            **common,
+            "Company Name": "Munchen Labs",
+            "Job Title": "Backend Engineer",
             "Job Link": "https://www.linkedin.com/jobs/view/992200",
             "ATS": "LinkedIn",
         },
         {
             **common,
-            "Company Name": "München Labs GmbH",
-            "Job Title": "ATS version of role",
-            "Job Link": "https://example.com/jobs/ats-version",
+            "Company Name": "München Labs",
+            "Job Title": "Data Engineer",
+            "Job Link": "https://www.linkedin.com/jobs/view/992201",
+            "ATS": "LinkedIn",
+        },
+        {
+            **common,
+            "Company Name": "Acme Systems",
+            "Job Title": "Senior QA Engineer",
+            "Job Link": "https://example.com/jobs/expired-ats-twin",
+            "Posted Date": expired_posted_date,
             "ATS": "greenhouse",
         },
         {
             **common,
-            "Company Name": "Unrelated LinkedIn Company",
-            "Job Title": "Unrelated LinkedIn role",
-            "Job Link": "https://www.linkedin.com/jobs/view/992201",
+            "Company Name": "Acme Systems",
+            "Job Title": "Senior QA Engineer",
+            "Job Link": "https://www.linkedin.com/jobs/view/992202",
             "ATS": "LinkedIn",
         },
     ])
     replacement_stats = storage.upsert_jobs(replacement_rows)
-    assert replacement_stats.inserted == 3, replacement_stats
+    assert replacement_stats.inserted == 4, replacement_stats
+    assert replacement_stats.skipped == 1, replacement_stats
     with storage.connect() as connection, connection.cursor() as cursor:
         cursor.execute(
             "SELECT identity_key FROM jobs WHERE title = %s",
-            ("LinkedIn version of role",),
+            ("Backend Engineer",),
         )
         linkedin_identity = cursor.fetchone()[0]
-    deleted_linkedin = storage.delete_linkedin_jobs_for_companies(["Munchen Labs"])
+    deleted_linkedin = storage.delete_linkedin_duplicates_of_ats_jobs()
     assert deleted_linkedin == 1, deleted_linkedin
     with storage.connect() as connection, connection.cursor() as cursor:
         cursor.execute(
-            "SELECT count(*) FROM jobs WHERE company_name = %s AND title = %s",
-            ("München Labs GmbH", "ATS version of role"),
+            "SELECT count(*) FROM jobs WHERE company_name = %s AND title = %s AND source = %s",
+            ("München Labs GmbH", "Backend Engineer (m/w/d)", "greenhouse"),
         )
         assert cursor.fetchone()[0] == 1
         cursor.execute(
-            "SELECT count(*) FROM jobs WHERE company_name = %s",
-            ("Unrelated LinkedIn Company",),
+            "SELECT count(*) FROM jobs WHERE company_name = %s AND title = %s AND source = 'LinkedIn'",
+            ("München Labs", "Data Engineer"),
         )
         assert cursor.fetchone()[0] == 1
-        cursor.execute("SELECT count(*) FROM jobs WHERE source = 'LinkedIn'")
+        cursor.execute(
+            "SELECT count(*) FROM jobs WHERE company_name = %s AND title = %s AND source = 'LinkedIn'",
+            ("Acme Systems", "Senior QA Engineer"),
+        )
         assert cursor.fetchone()[0] == 1
+        cursor.execute(
+            "SELECT count(*) FROM jobs WHERE company_name = %s AND title = %s AND source = %s",
+            ("Acme Systems", "Senior QA Engineer", "greenhouse"),
+        )
+        assert cursor.fetchone()[0] == 0
         cursor.execute("SELECT count(*) FROM job_fingerprints WHERE identity_key = %s", (linkedin_identity,))
         assert cursor.fetchone()[0] == 1
 
     print(
         "PostgreSQL smoke: migrations, moderated company sync, historical-job preservation, "
         "semantic dedup, URL mutation, expiry skip, 30-day deletion, agent API views, "
-        "company board skipping, and ATS-over-LinkedIn replacement passed"
+        "company board skipping, and retained-job LinkedIn duplicate deletion passed"
     )
     return 0
 

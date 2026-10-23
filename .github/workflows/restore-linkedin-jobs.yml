@@ -1,0 +1,48 @@
+name: Restore LinkedIn jobs from backup
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_run_id:
+        description: PostgreSQL Backup workflow run id
+        required: true
+        type: string
+      apply:
+        description: Write restored rows (otherwise dry run)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+      GH_TOKEN: ${{ github.token }}
+      BACKUP_RUN_ID: ${{ inputs.backup_run_id }}
+      APPLY: ${{ inputs.apply }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip install --disable-pip-version-check --no-deps -e .
+      - name: Download backup artifact
+        run: |
+          [[ "$BACKUP_RUN_ID" =~ ^[0-9]+$ ]] || { echo "backup_run_id must be numeric" >&2; exit 1; }
+          gh run download "$BACKUP_RUN_ID" -R "$GITHUB_REPOSITORY" -D backup
+      - name: Restore
+        run: |
+          dump=$(ls backup/*/daily-berlin-jobs.sql.gz | head -1)
+          if [ "$APPLY" = "true" ]; then
+            python scripts/restore_linkedin_jobs.py "$dump" --apply
+          else
+            python scripts/restore_linkedin_jobs.py "$dump"
+          fi

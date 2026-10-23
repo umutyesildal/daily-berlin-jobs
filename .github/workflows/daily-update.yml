@@ -2,6 +2,12 @@ name: Daily Berlin Jobs Update
 
 on:
   workflow_dispatch:
+    inputs:
+      linkedin_posted_within_hours:
+        description: LinkedIn job posting age window in hours
+        type: string
+        required: false
+        default: "24"
   schedule:
     - cron: "17 8 * * *"
 
@@ -75,12 +81,26 @@ jobs:
 
       - name: Publish canonical datasets
         if: steps.freshness.outputs.skip != 'true'
+        env:
+          LINKEDIN_POSTED_WITHIN_HOURS: ${{ github.event_name == 'workflow_dispatch' && inputs.linkedin_posted_within_hours || '24' }}
         run: |
+          hours="$LINKEDIN_POSTED_WITHIN_HOURS"
+          if ! [[ "$hours" =~ ^[0-9]+$ ]]; then
+            echo "linkedin_posted_within_hours must be an integer between 1 and 720" >&2
+            exit 1
+          fi
+          hours=$((10#$hours))
+          if (( hours < 1 || hours > 720 )); then
+            echo "linkedin_posted_within_hours must be an integer between 1 and 720" >&2
+            exit 1
+          fi
+          posted_within_seconds=$((hours * 3600))
           python -m daily_jobs.post_process_jobs \
             --storage-backend postgres \
             --retention-days 30 \
             --include-linkedin-daily \
             --linkedin-raw-daily \
+            --linkedin-posted-within-seconds "$posted_within_seconds" \
             --no-update-baseline
 
       - name: Verify PostgreSQL snapshot
