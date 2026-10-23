@@ -180,6 +180,31 @@ class BoardExtractionTests(unittest.TestCase):
             ("smartrecruiters", "SmartRecruitersCase", ""),
         })
 
+    def test_workday_boards_preserve_tenant_site_case_and_region(self):
+        found = extract_boards(
+            "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?source=job "
+            "https://expedia.wd108.myworkdayjobs.com/en-US/search"
+        )
+
+        self.assertEqual(found, {
+            ("workday", "nvidia/NVIDIAExternalCareerSite", "wd5"),
+        })
+
+        self.assertEqual(
+            career_page("workday", "expedia/search", "wd108"),
+            "https://expedia.wd108.myworkdayjobs.com/search",
+        )
+
+    def test_workday_discovery_skips_non_site_path_segments(self):
+        self.assertEqual(
+            extract_boards(
+                "https://example.wd1.myworkdayjobs.com/job "
+                "https://example.wd1.myworkdayjobs.com/details "
+                "https://example.wd1.myworkdayjobs.com/en-US/search"
+            ),
+            set(),
+        )
+
     def test_bad_slugs_are_dropped(self):
         self.assertEqual(
             extract_boards(

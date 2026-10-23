@@ -96,6 +96,8 @@ test("MCP status result includes JSON text and structured content", () => {
       jobs_md: "https://daily.example/jobs.md",
       today_md: "https://daily.example/today.md",
       rss: "https://daily.example/feed.xml",
+      companies: "https://daily.example/api/v1/companies",
+      companies_md: "https://daily.example/companies.md",
     },
   };
   const result = mcpStatusResult(status);

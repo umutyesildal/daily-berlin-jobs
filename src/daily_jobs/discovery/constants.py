@@ -2,7 +2,7 @@ import re
 
 ATS_DOMAINS = [
     "ashbyhq.com", "greenhouse.io", "lever.co", "personio.de", "personio.com",
-    "recruitee.com", "workable.com", "smartrecruiters.com",
+    "recruitee.com", "workable.com", "smartrecruiters.com", "myworkdayjobs.com",
 ]
 
 NEBIUS_MODEL = "Qwen/Qwen3-235B-A22B-Instruct-2507"
@@ -43,6 +43,13 @@ BOARD_PATTERNS = [
     ("recruitee", re.compile(r"([a-z0-9][a-z0-9-]*)\.recruitee\.com", re.I)),
     ("workable", re.compile(r"apply\.workable\.com/(?:api/v\d/(?:widget/)?accounts/)?([A-Za-z0-9_-]+)", re.I)),
     ("smartrecruiters", re.compile(r"(?:jobs|careers)\.smartrecruiters\.com/([A-Za-z0-9_-]+)", re.I)),
+    (
+        "workday",
+        re.compile(
+            r"([a-z0-9-]+)\.(wd\d+)\.myworkdayjobs\.com/(?:[a-z]{2}-[a-z]{2}/)?([A-Za-z0-9_-]+)",
+            re.I,
+        ),
+    ),
 ]
 
 BAD_SLUGS = {"", "api", "embed", "v0", "v1", "jobs", "job", "careers", "www", "app", "j", "js", "static",

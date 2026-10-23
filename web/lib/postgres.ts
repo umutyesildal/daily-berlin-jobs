@@ -10,6 +10,7 @@ import {
   type SourceHealthSummary,
 } from "./agent-api";
 import type { Job, JobsSnapshot } from "./jobs";
+import { sampleCompanyRows, type ApiCompanySourceRow } from "./companies-api";
 import { getSampleAgentJobs, getSampleJobsSnapshot } from "./sample-data";
 
 type JobRow = {
@@ -352,6 +353,17 @@ export async function getAdminSourceHealth(): Promise<SourceHealthAdminItem[]> {
     consecutive_errors: row.consecutive_errors ?? 0,
     disabled_at: row.disabled_at ? new Date(row.disabled_at).toISOString() : null,
   }));
+}
+
+export async function getApiCompanyRows(): Promise<ApiCompanySourceRow[]> {
+  if (process.env.USE_SAMPLE_DATA?.trim().toLowerCase() === "true") {
+    return sampleCompanyRows(getSampleAgentJobs());
+  }
+  const result = await databasePool().query<ApiCompanySourceRow>(
+    `SELECT company_id, name, website, ats, career_page, health, last_checked_at, open_jobs
+     FROM api_companies`,
+  );
+  return result.rows;
 }
 
 export async function getAgentJobs(query: JobsQuery, now = new Date()) {

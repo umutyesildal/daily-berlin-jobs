@@ -22,6 +22,7 @@ import pandas as pd
 from ..company_catalog import normalize_url
 from ..job_taxonomy import classify_role
 from ..postgres_storage import PostgresJobStorage
+from ..scrapers.done.workday_scraper import WorkdayScraper
 from .boards import career_page, extract_boards
 from .constants import (
     AGGREGATOR_DOMAINS,
@@ -502,6 +503,20 @@ class DiscoveryRunner:
                         "location": " | ".join(filter(None, [location.get("city") or "", location.get("fullLocation") or ""])),
                         "text": "",
                     })
+            elif ats == "workday":
+                tenant = slug.split("/", 1)[0]
+                name = tenant
+                scraper = WorkdayScraper(delay=0)
+                for job in scraper.scrape_jobs(
+                    career_page("workday", slug, region),
+                    tenant,
+                    label="workday",
+                ):
+                    jobs.append({
+                        "title": job.get("Job Title", ""),
+                        "location": job.get("Location", ""),
+                        "text": job.get("Job Description", "")[:4000],
+                    })
         except Exception as error:
             result = {"ok": False, "error": safe_error_message(error), "jobs": []}
             self.board_cache[board] = result
@@ -776,10 +791,11 @@ class DiscoveryRunner:
         for board, info in api_pass.items():
             best = None
             pool_names = board_origin.get(board) or set()
+            board_name = board[1].split("/", 1)[0] if board[0] == "workday" else board[1]
             for company in pool_names | set(linkedin_titles):
                 similarity = max(
                     name_similarity(company, info.get("name") or ""),
-                    name_similarity(company, board[1]),
+                    name_similarity(company, board_name),
                 )
                 overlap = company in pool_names and title_overlap(linkedin_titles[company], info["all_titles"])
                 if similarity >= 0.8 or overlap:

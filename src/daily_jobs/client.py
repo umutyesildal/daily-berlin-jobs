@@ -21,6 +21,8 @@ from .scrapers.done.stripe_scraper import StripeScraper
 from .scrapers.done.traderepublic_scraper import TradeRepublicScraper
 from .scrapers.done.wipro_scraper import WiproScraper
 from .scrapers.done.workable_scraper import WorkableScraper
+from .scrapers.done.workday_scraper import WorkdayScraper
+from .scrapers.done.phenom_scraper import PhenomScraper
 from .scrapers.done.linkedin_guest_jobs import LinkedInGuestJobsClient
 import time
 import requests
@@ -129,6 +131,9 @@ class JobCrawlerController:
         'traderepublic': TradeRepublicScraper,
         'wipro': WiproScraper,
         'workable': WorkableScraper,
+        'workday': WorkdayScraper,
+        'myworkdayjobs': WorkdayScraper,
+        'phenom': PhenomScraper,
         'linkedin': LinkedInGuestJobsClient,
     }
     
