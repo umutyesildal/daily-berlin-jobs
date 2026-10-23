@@ -137,7 +137,9 @@ class PostgresJobStorage:
             import psycopg
         except ImportError as exc:
             raise RuntimeError("PostgreSQL support requires psycopg") from exc
-        return psycopg.connect(self.database_url)
+        # Supabase's pooler can hand a connection that already holds psycopg's
+        # auto-prepared statements to another client, so never prepare server-side.
+        return psycopg.connect(self.database_url, prepare_threshold=None)
 
     def migrate(self, migrations_dir: Optional[Path] = None) -> list[str]:
         migrations_dir = migrations_dir or Path(__file__).resolve().parents[2] / "db" / "migrations"
