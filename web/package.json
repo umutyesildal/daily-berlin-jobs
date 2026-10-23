@@ -14,7 +14,7 @@
     "@modelcontextprotocol/sdk": "1.32.1",
     "@vercel/analytics": "^2.0.1",
     "google-auth-library": "^10.9.0",
-    "next": "^16.3.1",
+    "next": "^16.4.3",
     "pg": "^8.23.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
