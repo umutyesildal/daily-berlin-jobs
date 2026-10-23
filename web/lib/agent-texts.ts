@@ -18,6 +18,7 @@ const llmsText = [
   "- [Jobs (JSON)](${base}/api/v1/jobs): query parameters `since` (ISO 8601; jobs first seen after this time), `latest=1` (jobs added in the most recent update), `role`, `level`, `work_mode` (comma-separated, values listed in status `filters`), `q` (free text over title, company and tech stack), `source` (`ats` or `linkedin`), `limit` (1-500, default 100), `cursor` (from `next_cursor`), `format=md`",
   "- Job detail: `${base}/api/v1/jobs/{id}` (JSON) or `${base}/jobs/{id}.md` (Markdown)",
   "- [RSS feed](${base}/feed.xml)",
+  "- [Companies](${base}/api/v1/companies): every company crawled directly from its own career site, with website, ATS, career page, source health and open job count (Markdown: ${base}/companies.md)",
   "",
   "## Notes",
   "",

@@ -34,3 +34,6 @@ ats:
   - id: traderepublic
   - id: wipro
   - id: workable
+  - id: workday
+    aliases: [myworkdayjobs, Workday]
+  - id: phenom

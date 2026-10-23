@@ -64,6 +64,8 @@ export type AgentApiStatus = {
     jobs_md: string;
     today_md: string;
     rss: string;
+    companies: string;
+    companies_md: string;
   };
 };
 
@@ -330,6 +332,8 @@ export function createAgentStatus(input: {
       jobs_md: `${input.baseUrl}/jobs.md`,
       today_md: `${input.baseUrl}/today.md`,
       rss: `${input.baseUrl}/feed.xml`,
+      companies: `${input.baseUrl}/api/v1/companies`,
+      companies_md: `${input.baseUrl}/companies.md`,
     },
   };
 }

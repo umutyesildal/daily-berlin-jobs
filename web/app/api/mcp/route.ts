@@ -2,7 +2,19 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
 import webPackage from "../../../package.json";
-import { getAgentJob, getAgentJobs, getAgentStatus, getAgentUpdatedAt } from "@/lib/postgres";
+import {
+  buildCompaniesQueryFromMcpInput,
+  groupAndFilterCompanies,
+  mcpCompaniesResult,
+  type McpListCompaniesInput,
+} from "@/lib/companies-api";
+import {
+  getAgentJob,
+  getAgentJobs,
+  getAgentStatus,
+  getAgentUpdatedAt,
+  getApiCompanyRows,
+} from "@/lib/postgres";
 import {
   buildJobsQueryFromMcpInput,
   MCP_INSTRUCTIONS,
@@ -118,6 +130,28 @@ export async function POST(request: Request): Promise<Response> {
           getAgentUpdatedAt(),
         ]);
         return mcpJobResult(job, updatedAt, baseUrl);
+      },
+    );
+
+    server.registerTool(
+      "list_companies",
+      {
+        description: "List companies with active Berlin job sources and their open-job counts.",
+        inputSchema: z.object({
+          query: z.string().optional(),
+          ats: z.string().optional(),
+          has_jobs: z.boolean().optional(),
+        }),
+        annotations: { readOnlyHint: true, openWorldHint: false },
+      },
+      async (input) => {
+        const filters = buildCompaniesQueryFromMcpInput(input as McpListCompaniesInput);
+        const [rows, updatedAt] = await Promise.all([
+          getApiCompanyRows(),
+          getAgentUpdatedAt(),
+        ]);
+        const companies = groupAndFilterCompanies(rows, baseUrl, filters);
+        return mcpCompaniesResult(updatedAt, companies);
       },
     );
 

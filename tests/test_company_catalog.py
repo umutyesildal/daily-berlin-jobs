@@ -138,7 +138,7 @@ Engineering office in Berlin.
             "name": "Example",
             "website": "https://example.com",
             "career_page": "https://example.com/jobs",
-            "ats": "Workday",
+            "ats": "Unknown Platform",
             "berlin_evidence": "https://example.com/jobs/berlin",
         }
         catalog = AtsCatalog.load(Path(__file__).resolve().parents[1] / "catalog" / "ats.yaml")

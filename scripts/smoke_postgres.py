@@ -21,12 +21,13 @@ def main() -> int:
     storage = PostgresJobStorage(retention_days=30)
     storage.migrate()
     with storage.connect() as connection, connection.cursor() as cursor:
-        cursor.execute("SELECT to_regclass(%s), to_regclass(%s), to_regclass(%s), to_regclass(%s), to_regclass(%s)", (
+        cursor.execute("SELECT to_regclass(%s), to_regclass(%s), to_regclass(%s), to_regclass(%s), to_regclass(%s), to_regclass(%s)", (
             "public.discovery_search_cache",
             "public.discovered_boards",
             "public.source_health",
             "public.source_health_summary",
             "public.source_health_admin",
+            "public.api_companies",
         ))
         assert all(cursor.fetchone())
         cursor.execute(
@@ -391,12 +392,29 @@ def main() -> int:
             (source_id,),
         )
         assert cursor.fetchone() == (health_name, disabled_reason)
+        cursor.execute(
+            """
+            SELECT company_id, name, website, ats, career_page, health, last_checked_at, open_jobs
+            FROM api_companies WHERE name = %s
+            """,
+            ("Discovery Smoke Company",),
+        )
+        api_company = cursor.fetchone()
+        assert api_company is not None
+        assert api_company[1] == "Discovery Smoke Company"
+        cursor.execute(
+            "SELECT column_name FROM information_schema.columns "
+            "WHERE table_schema = 'public' AND table_name = 'api_companies'"
+        )
+        api_company_columns = {row[0] for row in cursor.fetchall()}
+        assert "last_error" not in api_company_columns
         cursor.execute("RESET ROLE")
 
     print(
         "PostgreSQL smoke: migrations, moderated company sync, historical-job preservation, "
         "semantic dedup, URL mutation, expiry skip, 30-day deletion, agent API views, "
-        "company board skipping, retained-job LinkedIn duplicate deletion, and source health passed"
+        "company board skipping, retained-job LinkedIn duplicate deletion, source health, "
+        "and companies API view passed"
     )
     return 0
 
