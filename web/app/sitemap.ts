@@ -24,6 +24,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 1,
     },
+    {
+      url: `${SITE_URL}/privacy`,
+      lastModified: new Date("2026-10-25"),
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
     ...CATEGORIES.map((category) => ({
       url: `${SITE_URL}/berlin/${category.slug}`,
       lastModified: latestSeen ?? new Date(),

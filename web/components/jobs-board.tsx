@@ -220,6 +220,7 @@ export function JobsBoard({
         </nav>
         <nav aria-label="Creator links">
           <a href="https://github.com/umutyesildal/daily-berlin-jobs/issues/new?template=company_suggestion.yml" target="_blank" rel="noreferrer">Suggest a company</a>
+          <a href="/privacy">Privacy</a>
           <a className="admin-footer-link" href="/admin" aria-label="Admin">Admin</a>
         </nav>
       </footer>

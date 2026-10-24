@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PrivacyFooter } from "@/components/privacy-footer";
 import { SeoJobList } from "@/components/seo-job-list";
 import { getAgentCompanyNames, getAgentJobsByCompany } from "@/lib/postgres";
 import { CATEGORIES, SITE_URL, slugify } from "@/lib/seo";
@@ -75,6 +76,7 @@ export default async function CompanyPage({ params }: PageProps) {
           ))}
         </nav>
       )}
+      <PrivacyFooter />
     </main>
   );
 }
