@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PrivacyFooter } from "@/components/privacy-footer";
 import { SeoJobList } from "@/components/seo-job-list";
 import { formatHomeFreshnessLabel, parseJobsQuery } from "@/lib/agent-api";
 import { getAgentUpdatedAt, getAllAgentJobs } from "@/lib/postgres";
@@ -94,6 +95,7 @@ export default async function CategoryPage({ params }: PageProps) {
           <a href={`/berlin/${item.slug}`} key={item.slug}>{item.h1}</a>
         ))}
       </nav>
+      <PrivacyFooter />
     </main>
   );
 }

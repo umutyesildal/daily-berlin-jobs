@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PrivacyFooter } from "@/components/privacy-footer";
 import { SeoJobList, SourceBadge } from "@/components/seo-job-list";
 import { formatHomeFreshnessLabel, parseJobsQuery } from "@/lib/agent-api";
 import { getAgentJob, getAgentJobs, getAgentUpdatedAt } from "@/lib/postgres";
@@ -133,6 +134,7 @@ export default async function JobPage({ params }: PageProps) {
         {category && <a href={`/berlin/${category.slug}`}>More {category.h1.toLowerCase()}</a>}
         <a href="/">All Berlin engineering jobs</a>
       </nav>
+      <PrivacyFooter />
     </main>
   );
 }
