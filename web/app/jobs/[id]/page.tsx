@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PrivacyFooter } from "@/components/privacy-footer";
 import { SeoJobList, SourceBadge } from "@/components/seo-job-list";
 import { formatHomeFreshnessLabel, parseJobsQuery } from "@/lib/agent-api";
+import { checkGerman, type GermanVerdict } from "@/lib/german-check";
 import { getAgentJob, getAgentJobs, getAgentUpdatedAt } from "@/lib/postgres";
 import {
   buildJobPostingJsonLd,
@@ -68,6 +69,13 @@ export default async function JobPage({ params }: PageProps) {
     .slice(0, 6);
   const category = categoryForRole(job.role);
   const plainDescription = job.sourceType === "ats" ? htmlToText(job.description) : "";
+  const germanCheck = plainDescription ? checkGerman(plainDescription, job.title) : null;
+  const germanLabel: Record<GermanVerdict, string> = {
+    required: "required",
+    nice_to_have: "a plus",
+    not_required: "not required",
+    unknown: "not mentioned",
+  };
   const descriptionParagraphs = plainDescription.split(/\n{2,}/).filter(Boolean);
   const jsonLd = buildJobPostingJsonLd(job);
   const postedDate = job.postedDate || job.firstSeenAt.slice(0, 10);
@@ -99,6 +107,14 @@ export default async function JobPage({ params }: PageProps) {
           {postedDate && <time dateTime={postedDate}>Posted {postedDate}</time>}
           <SourceBadge source={job.sourceType} detailed />
         </div>
+        {germanCheck && (
+          <p className="german-check-job-badge">
+            <strong>German: {germanCheck.inferred ? "likely required (ad is in German)" : germanLabel[germanCheck.verdict]}</strong>
+            {germanCheck.evidence[0] && <> — “{germanCheck.evidence[0]}”</>}
+            {" "}
+            <a href="/german-check">Check another ad →</a>
+          </p>
+        )}
         <p className="seo-freshness">{freshnessLabel}</p>
         {job.url && (
           <a
