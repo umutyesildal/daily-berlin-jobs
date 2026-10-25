@@ -115,6 +115,7 @@ export function JobsBoard({
         <span className="eyebrow">Updated daily from company career sites and LinkedIn</span>
         <h1>Engineering jobs in Berlin,<br />without the noise.</h1>
         <p>Software, data, platform, security and embedded engineering roles in one place.</p>
+        <p className="german-check-promo">New: <a href="/german-check">check whether a job needs German →</a></p>
         <p className="update-label">{updatedLabel}</p>
       </section>
 
@@ -221,6 +222,8 @@ export function JobsBoard({
         <nav aria-label="Creator links">
           <a href="https://github.com/umutyesildal/daily-berlin-jobs/issues/new?template=company_suggestion.yml" target="_blank" rel="noreferrer">Suggest a company</a>
           <a href="/privacy">Privacy</a>
+          <a href="/german-check">German check</a>
+          <a href="https://github.com/umutyesildal/berlin-job-search">AI job-search assistant</a>
           <a className="admin-footer-link" href="/admin" aria-label="Admin">Admin</a>
         </nav>
       </footer>

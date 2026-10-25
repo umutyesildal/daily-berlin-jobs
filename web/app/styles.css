@@ -15,6 +15,9 @@ button { cursor:pointer; }
 .hero { padding:38px 0 30px; max-width:720px; }
 .hero h1 { margin:7px 0 10px; font-size:clamp(32px,4vw,52px); line-height:1.02; letter-spacing:-.05em; }
 .hero p,.admin-card p { color:var(--muted); line-height:1.55; }
+.hero .german-check-promo { margin:14px 0 0; font-size:13px; }
+.german-check-promo a { color:var(--accent); font-weight:700; text-decoration:none; }
+.german-check-promo a:hover { text-decoration:underline; }
 .hero .update-label { margin:12px 0 0; font-size:13px; font-weight:600; }
 .controls { display:grid; grid-template-columns:1fr minmax(280px,420px); gap:18px; align-items:center; margin-bottom:18px; }
 .tabs { display:flex; gap:8px; }
@@ -68,6 +71,19 @@ button { cursor:pointer; }
 .seo-section h2,.browse-categories h2,.seo-related-links h2 { margin:0 0 14px; font-size:22px; letter-spacing:-.02em; }
 .job-description { max-width:74ch; line-height:1.7; }
 .job-description p { margin:0 0 16px; }
+.german-check-form { display:grid; max-width:760px; gap:9px; }
+.german-check-form label { margin-top:8px; font-size:13px; font-weight:700; }
+.german-check-form input,.german-check-form textarea { width:100%; border:1px solid var(--line); border-radius:12px; background:#fff; color:var(--ink); padding:12px 14px; }
+.german-check-form textarea { min-height:240px; resize:vertical; line-height:1.55; }
+.german-check-form button { justify-self:start; border:0; border-radius:10px; background:var(--ink); color:#fff; padding:12px 18px; font-weight:700; }
+.german-check-caveat { color:var(--muted); font-size:12px; }
+.german-check-result,.german-check-cta { border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.55); padding:18px; }
+.german-check-result { max-width:760px; margin-top:24px; }
+.german-check-result h2 { margin-top:0; }
+.german-check-result blockquote { margin:8px 0; border-left:3px solid var(--accent); background:rgba(255,255,255,.72); padding:10px 12px; line-height:1.6; }
+.german-check-cta { margin-top:34px; }
+.german-check-cta p { margin:0; max-width:74ch; line-height:1.55; }
+.german-check-cta a { color:var(--accent); font-weight:700; }
 .seo-job-list { display:grid; gap:10px; }
 .seo-job-card { border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.45); padding:16px; }
 .seo-job-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
@@ -76,6 +92,10 @@ button { cursor:pointer; }
 .seo-job-heading a:hover,.seo-job-company a:hover { color:var(--accent); text-decoration:underline; }
 .seo-job-company { margin:7px 0 10px; font-weight:700; }
 .seo-job-meta { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; color:var(--muted); font-size:13px; }
+.german-check-job-badge { max-width:74ch; margin:12px 0 0; color:var(--muted); font-size:13px; line-height:1.5; }
+.german-check-job-badge strong { color:var(--ink); }
+.german-check-job-badge a { color:var(--accent); font-weight:700; text-decoration:none; }
+.german-check-job-badge a:hover { text-decoration:underline; }
 .seo-empty { border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.45); padding:20px; }
 .seo-empty p { margin-top:0; }
 .seo-empty a,.seo-related-links a { color:var(--accent); text-decoration:none; }
