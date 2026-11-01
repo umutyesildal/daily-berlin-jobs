@@ -53,9 +53,19 @@ export function buildJobsQueryFromMcpInput(input: McpSearchJobsInput): JobsQuery
 }
 
 export function mcpStatusResult(status: AgentApiStatus): McpToolResult {
+  const publicStatus = {
+    updated_at: status.updated_at,
+    updated_at_berlin: status.updated_at_berlin,
+    job_count: status.job_count,
+    latest_update_count: status.latest_update_count,
+    stale: status.stale,
+    next_expected_window: status.next_expected_window,
+    filters: status.filters,
+    docs: status.docs,
+  };
   return {
-    content: [{ type: "text", text: JSON.stringify(status) }],
-    structuredContent: status,
+    content: [{ type: "text", text: JSON.stringify(publicStatus) }],
+    structuredContent: publicStatus,
   };
 }
 

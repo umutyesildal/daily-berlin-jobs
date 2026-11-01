@@ -68,7 +68,7 @@ test("MCP search query delegates ISO validation to the agent API parser", () => 
   );
 });
 
-test("MCP status result includes JSON text and structured content", () => {
+test("MCP status result omits internal crawl and source-health data", () => {
   const status: AgentApiStatus = {
     updated_at: "2026-10-23T05:00:00.000Z",
     updated_at_berlin: "2026-10-23 07:00 Europe/Berlin",
@@ -101,9 +101,21 @@ test("MCP status result includes JSON text and structured content", () => {
     },
   };
   const result = mcpStatusResult(status);
+  const publicStatus = {
+    updated_at: status.updated_at,
+    updated_at_berlin: status.updated_at_berlin,
+    job_count: status.job_count,
+    latest_update_count: status.latest_update_count,
+    stale: status.stale,
+    next_expected_window: status.next_expected_window,
+    filters: status.filters,
+    docs: status.docs,
+  };
 
-  assert.deepEqual(result.structuredContent, status);
-  assert.deepEqual(JSON.parse(result.content[0].text), status);
+  assert.deepEqual(result.structuredContent, publicStatus);
+  assert.deepEqual(JSON.parse(result.content[0].text), publicStatus);
+  assert.equal("last_run" in result.structuredContent!, false);
+  assert.equal("sources" in result.structuredContent!, false);
 });
 
 test("MCP search result shapes Markdown and structured list jobs", () => {
