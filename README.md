@@ -12,6 +12,8 @@ security, mobile, QA, and embedded/firmware/robotics. Mechanical, electrical,
 civil, manufacturing, energy, and field/service engineering remain out of
 scope. Python's `engineering-v2` taxonomy is the only classification authority.
 
+Live at [daily-berlin-jobs.vercel.app](https://daily-berlin-jobs.vercel.app), tracking around 1,400 open roles with about 25 new ones per day.
+
 ## Architecture
 
 ```mermaid
